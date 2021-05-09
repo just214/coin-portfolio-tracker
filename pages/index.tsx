@@ -12,8 +12,6 @@ type AppProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 const App = (props: AppProps) => {
   const [coingeckoData, setCoingeckoData] = useState<CoinGeckoData>(null);
   const [data, setData] = useState<CoinData[]>([]);
-  // const { query } = useRouter();
-  // console.log(query);
   useEffect(() => {
     async function fetchCoinGeckoData() {
       const res = await fetch(props.coingecko_endpoint, {
@@ -25,7 +23,7 @@ const App = (props: AppProps) => {
     }
     const interval = setInterval(async () => {
       fetchCoinGeckoData();
-    }, 10000);
+    }, 1000);
     fetchCoinGeckoData();
 
     return () => {
@@ -87,7 +85,7 @@ const App = (props: AppProps) => {
         const { usd, usd_24h_change } = coingeckoData[value.coinId];
 
         return (
-          <div className="bg-white rounded-lg my-2 p-3" key={value.coinId}>
+          <div className="bg-white rounded-lg my-2 p-3 mx-4" key={value.coinId}>
             <p className="flex items-center justify-between">
               <span className="font-bold">{value.coinName}</span>
               <span>{toUsd(usd)}</span>
