@@ -3,15 +3,17 @@ import { InferGetServerSidePropsType } from "next";
 import { useEffect, useState } from "react";
 import { AirTableTransactionRecord, CoinGeckoData, CoinData } from "../types";
 import { groupBy } from "lodash";
-import { toUsd, toNum } from "../utils";
+import { toNum, toUsd } from "../utils";
 import { Layout } from "../components/Layout";
-import { Collapse } from "../components/Collapse";
+import { FaCaretUp, FaCaretDown } from "react-icons/fa";
+import * as Collapsible from "@radix-ui/react-collapsible";
 
 type AppProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
 const App = (props: AppProps) => {
   const [coingeckoData, setCoingeckoData] = useState<CoinGeckoData>(null);
   const [data, setData] = useState<CoinData[]>([]);
+
   useEffect(() => {
     async function fetchCoinGeckoData() {
       const res = await fetch(props.coingecko_endpoint, {
@@ -76,8 +78,9 @@ const App = (props: AppProps) => {
 
   return (
     <Layout>
-      <header className="py-4 text-white">
-        <h1 className="text-4xl">{toUsd(totalValue)}</h1>
+      <header className="py-4 text-white text-center my-2 bg-gray-900">
+        <p className="text-sm">TOTAL VALUE</p>
+        <h1 className="text-2xl">{toUsd(totalValue)}</h1>
       </header>
 
       {data.map((value) => {
@@ -85,48 +88,67 @@ const App = (props: AppProps) => {
         const { usd, usd_24h_change } = coingeckoData[value.coinId];
 
         return (
-          <div className="bg-white rounded-lg my-2 p-3 mx-4" key={value.coinId}>
-            <p className="flex items-center justify-between">
-              <span className="font-bold">{value.coinName}</span>
-              <span>{toUsd(usd)}</span>
-              <span
-                className={
-                  usd_24h_change > 0 ? "text-green-500" : "text-red-500"
-                }
-              >
-                {usd_24h_change.toFixed(2)}%
-              </span>
-            </p>
-            <div className="text-center my-4">
-              <p className="text(gray-600 center) font-bold rounded-full bg-green-100 px-2 inline-block">
-                {toNum(value.total)} {value.coinSymbol} ={" "}
-                {toUsd(value.total * usd)}
-              </p>
-            </div>
+          <Collapsible.Root key={value.coinId}>
+            <Collapsible.Button className="px-2 py-1 my-2 block w-full border-b border-gray-800 font-medium">
+              <div className="flex items-center justify-between text-sm">
+                <div className="text-left flex-1">
+                  <p>{value.coinName}</p>
+                  <p className="text-xs text-gray-400">{value.coinSymbol}</p>
+                </div>
+                <div className="text-right flex-1">
+                  <p className="text-sm">{toUsd(usd)}</p>
 
-            <Collapse title="View More">
-              <ul>
-                {value.transactions.map((transaction) => {
-                  return (
-                    <li
-                      key={transaction.wallet}
-                      className="text-xs text-gray-500 flex items-center"
-                    >
-                      <p className="w-28">{transaction.wallet}</p>
+                  <span
+                    className={`
+                text-sm
+                justify-end
+                flex
+                items-center
+                ${usd_24h_change > 0 ? "text-green-600" : "text-red-600"}`}
+                  >
+                    {usd_24h_change > 0 ? (
+                      <FaCaretUp className="fill-current" />
+                    ) : (
+                      <FaCaretDown className="fill-current" />
+                    )}
+                    {usd_24h_change.toFixed(2)}%
+                  </span>
+                </div>
+                <div className="children:text-right flex-1">
+                  <p>{toUsd(value.total * usd)}</p>
+                  <p className="text-xs">
+                    {toNum(value.total)} {value.coinSymbol}
+                  </p>
+                </div>
+              </div>
 
-                      <p>{toNum(transaction.quantity)}</p>
+              <Collapsible.Content>
+                <ul className="mt-4">
+                  {value.transactions.map((transaction) => {
+                    return (
+                      <li
+                        key={transaction.wallet}
+                        className="text-xs text-gray-700 flex items-center text-left"
+                      >
+                        <p className="w-28 font-medium">{transaction.wallet}</p>
 
-                      <p>
-                        {value.coinSymbol} = {toUsd(transaction.quantity * usd)}
-                      </p>
+                        <div className="flex items-center">
+                          <span className="inline-block w-20">
+                            {toNum(transaction.quantity)}
+                          </span>
 
-                      <hr />
-                    </li>
-                  );
-                })}
-              </ul>
-            </Collapse>
-          </div>
+                          <p>
+                            {value.coinSymbol} ={" "}
+                            {toUsd(transaction.quantity * usd)}
+                          </p>
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </Collapsible.Content>
+            </Collapsible.Button>
+          </Collapsible.Root>
         );
       })}
     </Layout>
