@@ -1,6 +1,10 @@
-export function toUsd(num: number) {
-  const options = { style: "currency", currency: "USD" };
-  return new Intl.NumberFormat("en-US", options).format(+toNum(num));
+export function toUsd(num: number, cap?: boolean) {
+  const options = {
+    style: "currency",
+    currency: "USD",
+    maximumSignificantDigits: cap ? undefined : 8,
+  };
+  return new Intl.NumberFormat("en-US", options).format(num);
 }
 
 export function toNum(num: number) {

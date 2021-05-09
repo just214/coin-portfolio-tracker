@@ -5,6 +5,10 @@ export default {
     body: apply`bg-gray-900 text-white`,
   },
   theme: {
-    extend: {},
+    extend: {
+      fontSize: {
+        xxs: "11px",
+      },
+    },
   },
 };

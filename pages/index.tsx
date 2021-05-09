@@ -104,7 +104,7 @@ const App = (props: AppProps) => {
                 justify-end
                 flex
                 items-center
-                ${usd_24h_change > 0 ? "text-green-600" : "text-red-600"}`}
+                ${usd_24h_change > 0 ? "text-green-500" : "text-red-500"}`}
                   >
                     {usd_24h_change > 0 ? (
                       <FaCaretUp className="fill-current" />
@@ -114,9 +114,9 @@ const App = (props: AppProps) => {
                     {usd_24h_change.toFixed(2)}%
                   </span>
                 </div>
-                <div className="children:text-right flex-1">
-                  <p>{toUsd(value.total * usd)}</p>
-                  <p className="text-xs">
+                <div className="children:text-right flex-1 text-blue-200">
+                  <p>{toUsd(value.total * usd, true)}</p>
+                  <p className="text-xxs">
                     {toNum(value.total)} {value.coinSymbol}
                   </p>
                 </div>
