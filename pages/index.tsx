@@ -1,7 +1,12 @@
 import { InferGetServerSidePropsType } from "next";
 // import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { AirTableTransactionRecord, CoinGeckoData, CoinData } from "../types";
+import {
+  AirTableTransactionRecord,
+  CoinGeckoData,
+  CoinData,
+  FinalReturnValue,
+} from "../types";
 import { groupBy } from "lodash";
 import { toNum, toUsd } from "../utils";
 import { Layout } from "../components/Layout";
@@ -11,6 +16,8 @@ import * as Collapsible from "@radix-ui/react-collapsible";
 type AppProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
 const App = (props: AppProps) => {
+  // const { query } = useRouter();
+  // console.log(query);
   const [coingeckoData, setCoingeckoData] = useState<CoinGeckoData>(null);
   const [data, setData] = useState<CoinData[]>([]);
 
@@ -80,7 +87,7 @@ const App = (props: AppProps) => {
     <Layout>
       <header className="py-4 text-white text-center my-2 bg-gray-900">
         <p className="text-sm">TOTAL VALUE</p>
-        <h1 className="text-2xl">{toUsd(totalValue)}</h1>
+        <h1 className="text-2xl">{toUsd(totalValue, true)}</h1>
       </header>
 
       {data.map((value) => {
@@ -90,12 +97,12 @@ const App = (props: AppProps) => {
         return (
           <Collapsible.Root key={value.coinId}>
             <Collapsible.Button className="px-2 py-1 my-2 block w-full border-b border-gray-800 font-medium">
-              <div className="flex items-center justify-between text-sm">
+              <div className="flex items-center justify-between text-sm px-2">
                 <div className="text-left flex-1">
                   <p>{value.coinName}</p>
                   <p className="text-xs text-gray-400">{value.coinSymbol}</p>
                 </div>
-                <div className="text-right flex-1">
+                <div className="text-right flex-1 mx-2">
                   <p className="text-sm">{toUsd(usd)}</p>
 
                   <span
@@ -114,7 +121,7 @@ const App = (props: AppProps) => {
                     {usd_24h_change.toFixed(2)}%
                   </span>
                 </div>
-                <div className="children:text-right flex-1 text-blue-200">
+                <div className="children:text-right flex-1 text-blue-200 mx-2">
                   <p>{toUsd(value.total * usd, true)}</p>
                   <p className="text-xxs">
                     {toNum(value.total)} {value.coinSymbol}
@@ -128,9 +135,11 @@ const App = (props: AppProps) => {
                     return (
                       <li
                         key={transaction.wallet}
-                        className="text-xs text-gray-700 flex items-center text-left"
+                        className="text-xs text-gray-300 flex items-center text-left"
                       >
-                        <p className="w-28 font-medium">{transaction.wallet}</p>
+                        <p className="w-28 font-medium text-blue-400">
+                          {transaction.wallet}
+                        </p>
 
                         <div className="flex items-center">
                           <span className="inline-block w-20">

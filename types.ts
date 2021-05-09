@@ -29,3 +29,16 @@ export type CoinData = {
   total: number;
   transactions: { wallet: string; quantity: number }[];
 };
+
+type Transaction = {
+  wallet: string;
+  quantity: number;
+};
+
+export type FinalReturnValue = {
+  coinName: string;
+  coinSymbol: string;
+  coinId: string;
+  total: number;
+  transactions: Transaction[];
+};

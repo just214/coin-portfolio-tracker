@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@radix-ui/react-accordion": "^0.0.14",
     "@radix-ui/react-collapsible": "^0.0.14",
     "@twind/next": "^1.0.7",
     "lodash": "^4.17.21",

@@ -1020,7 +1020,22 @@
   dependencies:
     "@babel/runtime" "^7.13.10"
 
-"@radix-ui/react-collapsible@^0.0.14":
+"@radix-ui/react-accordion@^0.0.14":
+  version "0.0.14"
+  resolved "https://registry.npmjs.org/@radix-ui/react-accordion/-/react-accordion-0.0.14.tgz#0f4a740d2694c5cedd0ee40ed31f2fbb93d46f62"
+  integrity sha512-Jfqy48uOzpFIyYVSWHLkpoDi9kUlw3X8G5DxLf/TZFqWDdOkYkcjTAOMWJelZcwikW26W2oYKV9Rvat7cLDaaw==
+  dependencies:
+    "@babel/runtime" "^7.13.10"
+    "@radix-ui/primitive" "0.0.5"
+    "@radix-ui/react-collapsible" "0.0.14"
+    "@radix-ui/react-compose-refs" "0.0.5"
+    "@radix-ui/react-context" "0.0.5"
+    "@radix-ui/react-id" "0.0.6"
+    "@radix-ui/react-polymorphic" "0.0.11"
+    "@radix-ui/react-primitive" "0.0.12"
+    "@radix-ui/react-use-controllable-state" "0.0.6"
+
+"@radix-ui/react-collapsible@0.0.14", "@radix-ui/react-collapsible@^0.0.14":
   version "0.0.14"
   resolved "https://registry.npmjs.org/@radix-ui/react-collapsible/-/react-collapsible-0.0.14.tgz#9a232961a98538ace58cb5cc26af00dbd71dc4e6"
   integrity sha512-DxGdREqbeLUcPUNjoBJ1krOYyWPRx8Ktreo/qgbQ//Ui4FRlA4IyuOq6x1pR2kkllnJ/CvhFZTR1JeeZ0b0U3g==
