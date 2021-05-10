@@ -24,7 +24,7 @@ export async function fetchAirtableData(
   id: string | string[]
 ) {
   try {
-    const ENDPOINT = `https://api.airtable.com/v0/${id}/Allocations?&view=Grid%20view`;
+    const ENDPOINT = `https://api.airtable.com/v0/${id}/Allocations?&view=Coin%20View`;
     const response = await fetch(ENDPOINT, {
       method: "GET",
       headers: { Authorization: `Bearer ${key}` },
