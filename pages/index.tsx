@@ -114,7 +114,7 @@ const App = (props) => {
   return (
     <Layout>
       <header className="py-4 text-blue-200 text-center my-2 bg-gray-900 sticky top-0 shadow-lg">
-        <h1 className="text-2xl font-bold">{toUsd(totalValueInUsd)}</h1>
+        <h1 className="text(3xl md:4xl) font-bold">{toUsd(totalValueInUsd)}</h1>
       </header>
 
       <Accordion.Root type="multiple" onValueChange={setExpandedCoinIds}>
