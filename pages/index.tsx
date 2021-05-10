@@ -1,4 +1,4 @@
-import Head from "next/head";
+import { PushSpinner } from "react-spinners-kit";
 import { useEffect, useState } from "react";
 import { CoinGeckoData, CoinData } from "../types";
 import { groupBy } from "lodash";
@@ -104,7 +104,12 @@ const App = (props) => {
     );
   }, [coingeckoData]);
 
-  if (!coingeckoData) return null;
+  if (!data.length)
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <PushSpinner />
+      </div>
+    );
 
   return (
     <Layout>
