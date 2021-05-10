@@ -20,13 +20,12 @@ const slideUpAnimation = animation("200ms ease-in-out", {
 
 const App = (props) => {
   const { airtableRecords } = props;
-  const { query } = useRouter();
   const [coingeckoData, setCoingeckoData] = useState<CoinGeckoData>(null);
   const [data, setData] = useState<CoinData[]>([]);
   const [totalValueInUsd, setTotalValueInUsd] = useState<number>(null);
   const [expandedCoinIds, setExpandedCoinIds] = useState([]);
 
-  // Step 2. Fetch the CoinGecko coin info for each coin in Airtable...on an interval every second
+  // Fetch the CoinGecko coin info for each coin in Airtable...on an interval every second
   useEffect(() => {
     if (!airtableRecords) return;
     async function fetchCoinGeckoData() {
@@ -50,7 +49,6 @@ const App = (props) => {
     }
     const interval = setInterval(async () => {
       const data = await fetchCoinGeckoData();
-      console.log("gecko success");
       setCoingeckoData(data);
     }, 1000);
     fetchCoinGeckoData();
@@ -125,7 +123,7 @@ const App = (props) => {
             <Accordion.Item
               key={value.coinId}
               value={value.coinId}
-              className={`transition-colors 200ms  my-3 border-b border-gray-700 focus:bg-transblack ${
+              className={`transition-colors duration-200 my-3 border-b border-gray-700 focus:bg-transblack py-1 ${
                 isExpanded ? "bg-transblack rounded-tr-xl rounded-tl-xl" : ""
               }  ${isExpanded ? "" : ""}`}
             >
