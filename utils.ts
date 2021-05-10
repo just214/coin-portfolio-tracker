@@ -1,10 +1,10 @@
 import { AirTableRecord } from "./types";
 
-export function toUsd(num: number, cap?: boolean) {
+export function toUsd(num: number) {
   const options = {
     style: "currency",
     currency: "USD",
-    maximumSignificantDigits: cap ? undefined : 8,
+    minimumSignificantDigits: num > 1 ? undefined : 4,
   };
   return new Intl.NumberFormat("en-US", options).format(num);
 }

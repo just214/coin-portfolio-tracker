@@ -136,7 +136,7 @@ const App = (props) => {
               value={value.coinId}
               className={`transition-colors duration-200 my-3 border-b border-gray-700 focus:bg-transblack py-1 ${
                 isExpanded ? "bg-transblack rounded-tr-xl rounded-tl-xl" : ""
-              }  ${isExpanded ? "" : ""}`}
+              }`}
             >
               <Accordion.Header>
                 <Accordion.Button
@@ -162,7 +162,7 @@ const App = (props) => {
                         ) : (
                           <FaCaretDown className="fill-current" />
                         )}
-                        {usd_24h_change.toFixed(2)}%
+                        {Math.abs(usd_24h_change.toFixed(2))}%
                       </span>
                     </div>
                     <div className="children:text-right flex-1 text-blue-200 mx-2">
