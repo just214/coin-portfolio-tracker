@@ -1,4 +1,4 @@
-export type AirTableTransactionRecord = {
+export type AirTableRecord = {
   createdTime: string;
   id: string;
   fields: {
@@ -22,23 +22,15 @@ export type CoinGeckoData = {
   [key: string]: CoinGeckoCoin;
 };
 
+type Allocation = {
+  walletName: string;
+  coinQuantity: number;
+};
+
 export type CoinData = {
   coinName: string;
   coinSymbol: string;
   coinId: string;
   total: number;
-  transactions: { wallet: string; quantity: number }[];
-};
-
-type Transaction = {
-  wallet: string;
-  quantity: number;
-};
-
-export type FinalReturnValue = {
-  coinName: string;
-  coinSymbol: string;
-  coinId: string;
-  total: number;
-  transactions: Transaction[];
+  allocations: Allocation[];
 };

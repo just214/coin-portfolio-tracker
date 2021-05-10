@@ -1,48 +1,84 @@
-import { InferGetServerSidePropsType } from "next";
-// import { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import {
-  AirTableTransactionRecord,
-  CoinGeckoData,
-  CoinData,
-  FinalReturnValue,
-} from "../types";
+import { CoinGeckoData, CoinData } from "../types";
 import { groupBy } from "lodash";
-import { toNum, toUsd } from "../utils";
+import { toNum, toUsd, fetchAirtableData } from "../utils";
 import { Layout } from "../components/Layout";
-import { FaCaretUp, FaCaretDown } from "react-icons/fa";
-import * as Collapsible from "@radix-ui/react-collapsible";
+import { FaCaretUp, FaCaretDown, FaPlus, FaMinus } from "react-icons/fa";
+import * as Accordion from "@radix-ui/react-accordion";
 
-type AppProps = InferGetServerSidePropsType<typeof getServerSideProps>;
-
-const App = (props: AppProps) => {
-  // const { query } = useRouter();
-  // console.log(query);
+const App = () => {
+  const { query } = useRouter();
+  if (!query.key || !query.id) {
+    return (
+      <div>
+        <p>
+          👀 Looks like you are missing your Airtable key or id query parameter.
+          Your URL should look something like this:{" "}
+        </p>
+        <p>
+          <code>
+            {"http://localhost:3000/?key=keyxUy57Slp9bDmy&id=appKWcd87Lp12xIa"}
+          </code>
+        </p>
+      </div>
+    );
+  }
+  const [airtableRecords, setAirtableRecords] = useState(null);
   const [coingeckoData, setCoingeckoData] = useState<CoinGeckoData>(null);
   const [data, setData] = useState<CoinData[]>([]);
+  const [totalValueInUsd, setTotalValueInUsd] = useState<number>(null);
+  const [expandedCoinIds, setExpandedCoinIds] = useState([]);
 
+  // STEP 1. Fetch and set Airtable data
   useEffect(() => {
+    async function fetchAndSetAirtableRecords() {
+      const { key, id } = query;
+      const airtableRecords = await fetchAirtableData(key, id);
+      setAirtableRecords(airtableRecords);
+    }
+
+    fetchAndSetAirtableRecords();
+  }, []);
+
+  // Step 2. Fetch the CoinGecko coin info for each coin in Airtable...on an interval every second
+  useEffect(() => {
+    if (!airtableRecords) return;
     async function fetchCoinGeckoData() {
-      const res = await fetch(props.coingecko_endpoint, {
-        method: "GET",
-        headers: { accept: "application/json" },
-      });
-      const values = (await res.json()) as CoinGeckoData;
-      setCoingeckoData(values);
+      try {
+        const coinIds = [
+          // @ts-ignore
+          ...new Set(airtableRecords.map((value) => value.fields.CoinID[0])),
+        ].join(",");
+
+        const coingecko_endpoint = `https://api.coingecko.com/api/v3/simple/price?ids=${coinIds}&vs_currencies=usd&include_24hr_change=true`;
+        const res = await fetch(coingecko_endpoint, {
+          method: "GET",
+          headers: { accept: "application/json" },
+        });
+        const values = (await res.json()) as CoinGeckoData;
+        return values;
+      } catch (error) {
+        console.error("COINGECKO ERROR", error);
+        return error;
+      }
     }
     const interval = setInterval(async () => {
-      fetchCoinGeckoData();
+      const data = await fetchCoinGeckoData();
+      console.log("gecko success");
+      setCoingeckoData(data);
     }, 1000);
     fetchCoinGeckoData();
 
     return () => {
       clearInterval(interval);
     };
-  }, []);
+  }, [airtableRecords]);
 
+  // Step 3. Massage the Airtable and Coin Gecko data into the final data objects and save as state for rendering
   useEffect(() => {
     const groupedCoinData = groupBy(
-      props.airtable_records,
+      airtableRecords,
       (value) => value.fields.CoinID
     );
 
@@ -56,16 +92,24 @@ const App = (props: AppProps) => {
         total: values.reduce((acc, value) => {
           return acc + value.fields.Quantity;
         }, 0),
-        transactions: values.map((value) => {
-          return {
-            wallet: value.fields.WalletName[0],
-            quantity: value.fields.Quantity,
-          };
-        }),
+        allocations: values
+          .map((value) => {
+            return {
+              walletName: value.fields.WalletName[0],
+              coinQuantity: value.fields.Quantity,
+            };
+          })
+          .sort((a, b) => (a.coinQuantity > b.coinQuantity ? -1 : 1)),
       };
     });
 
     if (!coingeckoData) return;
+
+    const totalValue = arrayWithTotals.reduce((acc, value) => {
+      return acc + value.total * (coingeckoData[value.coinId]?.usd || 0);
+    }, 0);
+
+    setTotalValueInUsd(totalValue);
 
     setData(
       arrayWithTotals.sort((a, b) => {
@@ -79,115 +123,100 @@ const App = (props: AppProps) => {
 
   if (!coingeckoData) return null;
 
-  const totalValue = data.reduce((acc, value) => {
-    return acc + value.total * (coingeckoData[value.coinId]?.usd || 0);
-  }, 0);
-
   return (
     <Layout>
-      <header className="py-4 text-white text-center my-2 bg-gray-900">
-        <p className="text-sm">TOTAL VALUE</p>
-        <h1 className="text-2xl">{toUsd(totalValue, true)}</h1>
+      <header className="py-4 text-blue-200 text-center my-2 bg-gray-900 sticky top-0 shadow-lg">
+        <h1 className="text-2xl font-bold">{toUsd(totalValueInUsd, true)}</h1>
       </header>
 
-      {data.map((value) => {
-        if (!coingeckoData[value.coinId]) return;
-        const { usd, usd_24h_change } = coingeckoData[value.coinId];
+      <Accordion.Root type="multiple" onValueChange={setExpandedCoinIds}>
+        {data.map((value) => {
+          const isExpanded = expandedCoinIds.includes(value.coinId);
+          const ExpandCollapseIcon = isExpanded ? FaMinus : FaPlus;
+          if (!coingeckoData[value.coinId]) return;
+          const { usd, usd_24h_change } = coingeckoData[value.coinId];
 
-        return (
-          <Collapsible.Root key={value.coinId}>
-            <Collapsible.Button className="px-2 py-1 my-2 block w-full border-b border-gray-800 font-medium">
-              <div className="flex items-center justify-between text-sm px-2">
-                <div className="text-left flex-1">
-                  <p>{value.coinName}</p>
-                  <p className="text-xs text-gray-400">{value.coinSymbol}</p>
-                </div>
-                <div className="text-right flex-1 mx-2">
-                  <p className="text-sm">{toUsd(usd)}</p>
+          return (
+            <Accordion.Item
+              key={value.coinId}
+              value={value.coinId}
+              className={`transition-colors 200ms border-1 rounded-lg my-3 ${
+                isExpanded ? "border-gray-500" : "border-transparent"
+              }`}
+            >
+              <Accordion.Header>
+                <Accordion.Button
+                  className={`w-full ring-0! outline-none! focus:bg-transblack px-2 py-1 rounded-lg ${
+                    isExpanded ? "bg-black" : ""
+                  }`}
+                >
+                  <div className="flex items-center justify-between text-sm px-2">
+                    <div className="text-left flex-1">
+                      <p>{value.coinName}</p>
+                      <p className="text-xs text-gray-400">
+                        {value.coinSymbol}
+                      </p>
+                    </div>
+                    <div className="text-right flex-1 mx-2">
+                      <p className="text-sm">{toUsd(usd)}</p>
 
-                  <span
-                    className={`
-                text-sm
-                justify-end
-                flex
-                items-center
-                ${usd_24h_change > 0 ? "text-green-500" : "text-red-500"}`}
-                  >
-                    {usd_24h_change > 0 ? (
-                      <FaCaretUp className="fill-current" />
-                    ) : (
-                      <FaCaretDown className="fill-current" />
-                    )}
-                    {usd_24h_change.toFixed(2)}%
-                  </span>
-                </div>
-                <div className="children:text-right flex-1 text-blue-200 mx-2">
-                  <p>{toUsd(value.total * usd, true)}</p>
-                  <p className="text-xxs">
-                    {toNum(value.total)} {value.coinSymbol}
-                  </p>
-                </div>
-              </div>
-
-              <Collapsible.Content>
-                <ul className="mt-4">
-                  {value.transactions.map((transaction) => {
+                      <span
+                        className={`text-sm justify-end flex items-center ${
+                          usd_24h_change > 0 ? "text-green-500" : "text-red-500"
+                        }`}
+                      >
+                        {usd_24h_change > 0 ? (
+                          <FaCaretUp className="fill-current" />
+                        ) : (
+                          <FaCaretDown className="fill-current" />
+                        )}
+                        {usd_24h_change.toFixed(2)}%
+                      </span>
+                    </div>
+                    <div className="children:text-right flex-1 text-blue-200 mx-2">
+                      <p>{toUsd(value.total * usd, true)}</p>
+                      <p className="text-xxs">
+                        {toNum(value.total)} {value.coinSymbol}
+                      </p>
+                    </div>
+                    <ExpandCollapseIcon className="text(gray-600 xxs)" />
+                  </div>
+                </Accordion.Button>
+              </Accordion.Header>
+              <Accordion.Panel className="p-2">
+                <ul>
+                  {value.allocations.map((allocation) => {
                     return (
                       <li
-                        key={transaction.wallet}
-                        className="text-xs text-gray-300 flex items-center text-left"
+                        key={allocation.walletName}
+                        className="flex items-center justify-between font-medium text(xxs gray-300)"
                       >
-                        <p className="w-28 font-medium text-blue-400">
-                          {transaction.wallet}
+                        <p className="flex-1">{allocation.walletName}</p>
+                        <p className="flex-1">
+                          {(
+                            (allocation.coinQuantity / value.total) *
+                            100
+                          ).toFixed(2)}
+                          %
                         </p>
-
-                        <div className="flex items-center">
-                          <span className="inline-block w-20">
-                            {toNum(transaction.quantity)}
-                          </span>
-
-                          <p>
-                            {value.coinSymbol} ={" "}
-                            {toUsd(transaction.quantity * usd)}
-                          </p>
-                        </div>
+                        <p className="flex-1">
+                          {toNum(allocation.coinQuantity)}
+                          {value.coinSymbol}
+                        </p>
+                        <p className="flex-1">
+                          {toUsd(allocation.coinQuantity * usd)}
+                        </p>
                       </li>
                     );
                   })}
                 </ul>
-              </Collapsible.Content>
-            </Collapsible.Button>
-          </Collapsible.Root>
-        );
-      })}
+              </Accordion.Panel>
+            </Accordion.Item>
+          );
+        })}
+      </Accordion.Root>
     </Layout>
   );
 };
-
-export async function getServerSideProps() {
-  const response = await fetch(process.env.AIRTABLE_API_ENDPOINT, {
-    method: "GET",
-    headers: { Authorization: `Bearer ${process.env.AIRTABLE_API_KEY}` },
-  });
-  const { records } = await response.json();
-  const coinIds = [
-    // @ts-ignore
-    ...new Set(records.map((value) => value.fields.CoinID[0])),
-  ].join(",");
-
-  const coingecko_endpoint = `https://api.coingecko.com/api/v3/simple/price?ids=${coinIds}&vs_currencies=usd&include_24hr_change=true`;
-
-  return {
-    props: {
-      airtable_records: records,
-      coingecko_endpoint,
-    },
-  } as {
-    props: {
-      airtable_records: AirTableTransactionRecord[];
-      coingecko_endpoint: string;
-    };
-  };
-}
 
 export default App;

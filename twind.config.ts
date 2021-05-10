@@ -9,6 +9,9 @@ export default {
       fontSize: {
         xxs: "11px",
       },
+      colors: {
+        transblack: "rgba(0,0,0,.8)",
+      },
     },
   },
 };
