@@ -1,4 +1,4 @@
-import { useRouter } from "next/router";
+import Head from "next/head";
 import { useEffect, useState } from "react";
 import { CoinGeckoData, CoinData } from "../types";
 import { groupBy } from "lodash";
@@ -108,11 +108,22 @@ const App = (props) => {
 
   return (
     <Layout>
+      <Head>
+        <script
+          type="text/javascript"
+          src="//raw.githubusercontent.com/shantanubala/haptics.js/master/haptics.js"
+        ></script>
+      </Head>
       <header className="py-4 text-blue-200 text-center my-2 bg-gray-900 sticky top-0 shadow-lg">
         <h1 className="text-2xl font-bold">{toUsd(totalValueInUsd, true)}</h1>
       </header>
 
-      <Accordion.Root type="multiple" onValueChange={setExpandedCoinIds}>
+      <Accordion.Root
+        type="multiple"
+        onValueChange={(value) => {
+          setExpandedCoinIds(value), window.Haptics.vibrate(200);
+        }}
+      >
         {data.map((value) => {
           const isExpanded = expandedCoinIds.includes(value.coinId);
           const ExpandCollapseIcon = isExpanded ? FaMinus : FaPlus;
