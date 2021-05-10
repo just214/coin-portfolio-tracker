@@ -123,9 +123,7 @@ const App = (props) => {
             <Accordion.Item
               key={value.coinId}
               value={value.coinId}
-              className={`transition-colors duration-200 my-3 border-b border-gray-700 focus:bg-transblack py-1 ${
-                isExpanded ? "bg-transblack rounded-tr-xl rounded-tl-xl" : ""
-              }`}
+              className={`transition-colors duration-200 my-3 border-b border-gray-700 py-1`}
             >
               <Accordion.Header>
                 <Accordion.Button
