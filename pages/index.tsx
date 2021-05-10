@@ -9,13 +9,13 @@ import * as Accordion from "@radix-ui/react-accordion";
 import { css, tw, animation } from "twind/css";
 
 const slideDownAnimation = animation("200ms ease-in-out", {
-  from: { height: "0" },
+  from: { height: "0px" },
   to: { height: "var(--radix-accordion-panel-height)" },
 });
 
 const slideUpAnimation = animation("200ms ease-in-out", {
   from: { height: "var(--radix-accordion-panel-height)" },
-  to: { height: "0" },
+  to: { height: "0px" },
 });
 
 const App = (props) => {
@@ -174,10 +174,17 @@ const App = (props) => {
               >
                 <ul className="p-4">
                   {value.allocations.map((allocation) => {
+                    if (value.allocations.length === 1) {
+                      return (
+                        <p className="font-medium text(xxs gray-300)">
+                          All in {allocation.walletName}.
+                        </p>
+                      );
+                    }
                     return (
                       <li
                         key={allocation.walletName}
-                        className="flex items-center justify-between font-medium text(xxs gray-300"
+                        className="flex items-center justify-between font-medium text(xxs gray-300)"
                       >
                         <p className="flex-1">{allocation.walletName}</p>
                         <p className="flex-1">
