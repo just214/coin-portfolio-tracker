@@ -115,12 +115,13 @@ const App = (props) => {
         ></script>
       </Head>
       <header className="py-4 text-blue-200 text-center my-2 bg-gray-900 sticky top-0 shadow-lg">
-        <h1 className="text-2xl font-bold">{toUsd(totalValueInUsd, true)}</h1>
+        <h1 className="text-2xl font-bold">{toUsd(totalValueInUsd)}</h1>
       </header>
 
       <Accordion.Root
         type="multiple"
         onValueChange={(value) => {
+          // @ts-ignore
           setExpandedCoinIds(value), window.Haptics.vibrate(200);
         }}
       >
@@ -162,11 +163,11 @@ const App = (props) => {
                         ) : (
                           <FaCaretDown className="fill-current" />
                         )}
-                        {Math.abs(usd_24h_change.toFixed(2))}%
+                        {Math.abs(usd_24h_change).toFixed(2)}%
                       </span>
                     </div>
                     <div className="children:text-right flex-1 text-blue-200 mx-2">
-                      <p>{toUsd(value.total * usd, true)}</p>
+                      <p>{toUsd(value.total * usd)}</p>
                       <p className="text-xxs">
                         {toNum(value.total)} {value.coinSymbol}
                       </p>
