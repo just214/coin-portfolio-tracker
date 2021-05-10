@@ -6,40 +6,25 @@ import { toNum, toUsd, fetchAirtableData } from "../utils";
 import { Layout } from "../components/Layout";
 import { FaCaretUp, FaCaretDown, FaPlus, FaMinus } from "react-icons/fa";
 import * as Accordion from "@radix-ui/react-accordion";
+import { css, tw, animation } from "twind/css";
 
-const App = () => {
+const slideDownAnimation = animation("200ms ease-in-out", {
+  from: { height: "0" },
+  to: { height: "var(--radix-accordion-panel-height)" },
+});
+
+const slideUpAnimation = animation("200ms ease-in-out", {
+  from: { height: "var(--radix-accordion-panel-height)" },
+  to: { height: "0" },
+});
+
+const App = (props) => {
+  const { airtableRecords } = props;
   const { query } = useRouter();
-  if (!query.key || !query.id) {
-    return (
-      <div>
-        <p>
-          👀 Looks like you are missing your Airtable key or id query parameter.
-          Your URL should look something like this:{" "}
-        </p>
-        <p>
-          <code>
-            {"http://localhost:3000/?key=keyxUy57Slp9bDmy&id=appKWcd87Lp12xIa"}
-          </code>
-        </p>
-      </div>
-    );
-  }
-  const [airtableRecords, setAirtableRecords] = useState(null);
   const [coingeckoData, setCoingeckoData] = useState<CoinGeckoData>(null);
   const [data, setData] = useState<CoinData[]>([]);
   const [totalValueInUsd, setTotalValueInUsd] = useState<number>(null);
   const [expandedCoinIds, setExpandedCoinIds] = useState([]);
-
-  // STEP 1. Fetch and set Airtable data
-  useEffect(() => {
-    async function fetchAndSetAirtableRecords() {
-      const { key, id } = query;
-      const airtableRecords = await fetchAirtableData(key, id);
-      setAirtableRecords(airtableRecords);
-    }
-
-    fetchAndSetAirtableRecords();
-  }, []);
 
   // Step 2. Fetch the CoinGecko coin info for each coin in Airtable...on an interval every second
   useEffect(() => {
@@ -140,15 +125,13 @@ const App = () => {
             <Accordion.Item
               key={value.coinId}
               value={value.coinId}
-              className={`transition-colors 200ms border-1 rounded-lg my-3 ${
-                isExpanded ? "border-gray-500" : "border-transparent"
-              }`}
+              className={`transition-colors 200ms  my-3 border-b border-gray-700 focus:bg-transblack ${
+                isExpanded ? "bg-transblack rounded-tr-xl rounded-tl-xl" : ""
+              }  ${isExpanded ? "" : ""}`}
             >
               <Accordion.Header>
                 <Accordion.Button
-                  className={`w-full ring-0! outline-none! focus:bg-transblack px-2 py-1 rounded-lg ${
-                    isExpanded ? "bg-black" : ""
-                  }`}
+                  className={`w-full ring-0! outline-none!  px-2 py-1`}
                 >
                   <div className="flex items-center justify-between text-sm px-2">
                     <div className="text-left flex-1">
@@ -183,13 +166,20 @@ const App = () => {
                   </div>
                 </Accordion.Button>
               </Accordion.Header>
-              <Accordion.Panel className="p-2">
-                <ul>
+              <Accordion.Panel
+                className={tw(
+                  css({
+                    '&[data-state="open"]': slideDownAnimation,
+                    '&[data-state="closed"]': slideUpAnimation,
+                  })
+                )}
+              >
+                <ul className="p-4">
                   {value.allocations.map((allocation) => {
                     return (
                       <li
                         key={allocation.walletName}
-                        className="flex items-center justify-between font-medium text(xxs gray-300)"
+                        className="flex items-center justify-between font-medium text(xxs gray-300"
                       >
                         <p className="flex-1">{allocation.walletName}</p>
                         <p className="flex-1">
@@ -200,8 +190,7 @@ const App = () => {
                           %
                         </p>
                         <p className="flex-1">
-                          {toNum(allocation.coinQuantity)}
-                          {value.coinSymbol}
+                          {toNum(allocation.coinQuantity)} {value.coinSymbol}
                         </p>
                         <p className="flex-1">
                           {toUsd(allocation.coinQuantity * usd)}
@@ -220,3 +209,13 @@ const App = () => {
 };
 
 export default App;
+
+export async function getServerSideProps(context) {
+  if (!context.query.id) return null;
+  const { key, id } = context.query;
+  const airtableRecords = await fetchAirtableData(key, id);
+
+  return {
+    props: { airtableRecords },
+  };
+}

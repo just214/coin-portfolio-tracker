@@ -10,7 +10,7 @@ export default {
         xxs: "11px",
       },
       colors: {
-        transblack: "rgba(0,0,0,.8)",
+        transblack: "rgba(0,0,0,.5)",
       },
     },
   },
