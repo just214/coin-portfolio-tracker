@@ -96,10 +96,10 @@ const App = (props) => {
 
     setData(
       arrayWithTotals.sort((a, b) => {
-        return (
-          b.total * coingeckoData[b.coinId]?.usd -
+        return b.total * coingeckoData[b.coinId]?.usd <
           a.total * coingeckoData[a.coinId]?.usd
-        );
+          ? -1
+          : 1;
       })
     );
   }, [coingeckoData]);
