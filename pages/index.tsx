@@ -8,12 +8,12 @@ import { FaCaretUp, FaCaretDown, FaPlus, FaMinus } from "react-icons/fa";
 import * as Accordion from "@radix-ui/react-accordion";
 import { css, tw, animation } from "twind/css";
 
-const slideDownAnimation = animation("200ms ease-in-out", {
+const slideDownAnimation = animation("150ms ease-in-out", {
   from: { height: "0px" },
   to: { height: "var(--radix-accordion-panel-height)" },
 });
 
-const slideUpAnimation = animation("200ms ease-in-out", {
+const slideUpAnimation = animation("150ms ease-in-out", {
   from: { height: "var(--radix-accordion-panel-height)" },
   to: { height: "0px" },
 });
