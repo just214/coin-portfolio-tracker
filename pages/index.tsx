@@ -134,35 +134,32 @@ const App = (props) => {
   return (
     <Layout>
       <Head>
-        <title>Cointail9</title>
+        <title>Cointail</title>
         <link
           rel="apple-touch-icon-precomposed"
           sizes="144x144"
-          href="public/apple-touch-icon-144x144.png"
+          href="/apple-touch-icon-144x144.png"
         />
         <link
           rel="apple-touch-icon-precomposed"
           sizes="152x152"
-          href="public/apple-touch-icon-152x152.png"
+          href="/apple-touch-icon-152x152.png"
         />
         <link
           rel="icon"
           type="image/png"
-          href="public/cointel-icon.svg"
+          href="/cointel-icon.svg"
           sizes="32x32"
         />
         <link
           rel="icon"
           type="image/png"
-          href="public/cointel-icon.svg"
+          href="/cointel-icon.svg"
           sizes="16x16"
         />
         <meta name="application-name" content="Cointail" />
         <meta name="msapplication-TileColor" content="#f5f5f5" />
-        <meta
-          name="msapplication-TileImage"
-          content="public/mstile-144x144.png"
-        />
+        <meta name="msapplication-TileImage" content="/mstile-144x144.png" />
       </Head>
       <header className="py-4 text-center my-2 sticky top-0 shadow-lg applydark">
         <h1
@@ -190,7 +187,7 @@ const App = (props) => {
             >
               <Accordion.Header>
                 <Accordion.Button
-                  className={`w-full ring-0 outline-none px-2 py-1 focus-visible:bg-transblack`}
+                  className={`w-full ring-0 outline-none px-2 py-1 md:focus-visible:bg-transblack`}
                 >
                   <div className="flex items-center justify-between text-sm px-2">
                     <div className="text-left flex-1">
