@@ -41,7 +41,7 @@ export const Layout = (props: LayoutProps) => {
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="Cointail" />
-        <link rel="manifest" href="/public/manifest.json" />
+        <link rel="manifest" href="/manifest.json" />
       </Head>
       {children}
     </main>
