@@ -31,7 +31,7 @@ const App = (props) => {
   useEffect(() => {
     setTimeout(() => {
       lastTotalValueInUsd.current = totalValueInUsd;
-    }, 1000);
+    }, 500);
   }, [totalValueInUsd]);
 
   // Fetch the CoinGecko coin info for each coin in Airtable...on an interval every second
@@ -115,11 +115,11 @@ const App = (props) => {
 
   function getTotalColor(previousTotal, currentTotal) {
     if (previousTotal > currentTotal) {
-      return "text-red-300";
+      return "text-red-400";
     } else if (previousTotal < currentTotal) {
-      return "text-green-300";
+      return "text-green-400";
     } else if (previousTotal === currentTotal) {
-      return "text-white";
+      return "text-blue-100";
     }
   }
 
@@ -158,7 +158,7 @@ const App = (props) => {
             >
               <Accordion.Header>
                 <Accordion.Button
-                  className={`w-full ring-0! outline-none! px-2 py-1`}
+                  className={`w-full ring-0! outline-none! px-2 py-1 focus-visible:bg-transblack`}
                 >
                   <div className="flex items-center justify-between text-sm px-2">
                     <div className="text-left flex-1">
