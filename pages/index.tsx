@@ -1,5 +1,5 @@
 import { PushSpinner } from "react-spinners-kit";
-import Link from "next/link";
+// import useSWR, { SWRConfig } from "swr";
 import { useEffect, useState, useRef } from "react";
 import { CoinGeckoData, CoinData } from "../types";
 import { groupBy } from "lodash";
@@ -154,7 +154,7 @@ const App = (props) => {
           return (
             <Accordion.Item
               value={value.coinId}
-              className={`duration-200 my-3 border(b gray-500) py-1`}
+              className={`duration-200 my-3 border(b gray-200 dark:gray-700) py-1`}
               key={value.coinId}
             >
               <Accordion.Header>
@@ -213,7 +213,7 @@ const App = (props) => {
                     if (value.allocations.length === 1) {
                       return (
                         <p
-                          className="font-medium text(xxs gray-300)"
+                          className="font-medium text(xxs)"
                           key={allocation.walletName}
                         >
                           All in {allocation.walletName}.
