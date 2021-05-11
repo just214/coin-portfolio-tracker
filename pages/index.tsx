@@ -1,5 +1,6 @@
 import { PushSpinner } from "react-spinners-kit";
-import { useEffect, useState } from "react";
+import { Transition } from "@headlessui/react";
+import { useEffect, useState, useRef } from "react";
 import { CoinGeckoData, CoinData } from "../types";
 import { groupBy } from "lodash";
 import { toNum, toUsd, fetchAirtableData } from "../utils";
@@ -24,6 +25,14 @@ const App = (props) => {
   const [data, setData] = useState<CoinData[]>([]);
   const [totalValueInUsd, setTotalValueInUsd] = useState<number>(null);
   const [expandedCoinIds, setExpandedCoinIds] = useState([]);
+
+  const lastTotalValueInUsd = useRef<number>(totalValueInUsd);
+
+  useEffect(() => {
+    setTimeout(() => {
+      lastTotalValueInUsd.current = totalValueInUsd;
+    }, 500);
+  }, [totalValueInUsd]);
 
   // Fetch the CoinGecko coin info for each coin in Airtable...on an interval every second
   useEffect(() => {
@@ -104,6 +113,16 @@ const App = (props) => {
     );
   }, [coingeckoData]);
 
+  function getTotalColor(previousTotal, currentTotal) {
+    if (previousTotal > currentTotal) {
+      return "text-red-300";
+    } else if (previousTotal < currentTotal) {
+      return "text-green-300";
+    } else if (previousTotal === currentTotal) {
+      return "text-white";
+    }
+  }
+
   if (!data.length)
     return (
       <div className="flex items-center justify-center h-screen">
@@ -113,8 +132,15 @@ const App = (props) => {
 
   return (
     <Layout>
-      <header className="py-4 text-blue-200 text-center my-2 bg-gray-900 sticky top-0 shadow-lg">
-        <h1 className="text(3xl md:4xl) font-bold">{toUsd(totalValueInUsd)}</h1>
+      <header className="py-4 text-center my-2 bg-gray-900 sticky top-0 shadow-lg">
+        <h1
+          className={`${getTotalColor(
+            lastTotalValueInUsd.current,
+            totalValueInUsd
+          )} text(3xl md:4xl) font-bold`}
+        >
+          {toUsd(totalValueInUsd)}
+        </h1>
       </header>
 
       <Accordion.Root type="multiple" onValueChange={setExpandedCoinIds}>
@@ -126,13 +152,13 @@ const App = (props) => {
 
           return (
             <Accordion.Item
-              key={value.coinId}
               value={value.coinId}
-              className={`transition-colors duration-200 my-3 border-b border-gray-700 py-1`}
+              className={`duration-200 my-3 border-b border-gray-700 py-1`}
+              key={value.coinId}
             >
               <Accordion.Header>
                 <Accordion.Button
-                  className={`w-full ring-0! outline-none!  px-2 py-1`}
+                  className={`w-full ring-0! outline-none! px-2 py-1`}
                 >
                   <div className="flex items-center justify-between text-sm px-2">
                     <div className="text-left flex-1">
@@ -179,7 +205,10 @@ const App = (props) => {
                   {value.allocations.map((allocation) => {
                     if (value.allocations.length === 1) {
                       return (
-                        <p className="font-medium text(xxs gray-300)">
+                        <p
+                          className="font-medium text(xxs gray-300)"
+                          key={allocation.walletName}
+                        >
                           All in {allocation.walletName}.
                         </p>
                       );
