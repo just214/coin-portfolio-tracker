@@ -1,5 +1,5 @@
+import Head from "next/head";
 import { PushSpinner } from "react-spinners-kit";
-// import useSWR, { SWRConfig } from "swr";
 import { useEffect, useState, useRef } from "react";
 import { CoinGeckoData, CoinData } from "../types";
 import { groupBy } from "lodash";
@@ -133,6 +133,37 @@ const App = (props) => {
 
   return (
     <Layout>
+      <Head>
+        <title>Cointail9</title>
+        <link
+          rel="apple-touch-icon-precomposed"
+          sizes="144x144"
+          href="public/apple-touch-icon-144x144.png"
+        />
+        <link
+          rel="apple-touch-icon-precomposed"
+          sizes="152x152"
+          href="public/apple-touch-icon-152x152.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          href="public/cointel-icon.svg"
+          sizes="32x32"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          href="public/cointel-icon.svg"
+          sizes="16x16"
+        />
+        <meta name="application-name" content="Cointail" />
+        <meta name="msapplication-TileColor" content="#f5f5f5" />
+        <meta
+          name="msapplication-TileImage"
+          content="public/mstile-144x144.png"
+        />
+      </Head>
       <header className="py-4 text-center my-2 sticky top-0 shadow-lg applydark">
         <h1
           className={`${getTotalColor(
