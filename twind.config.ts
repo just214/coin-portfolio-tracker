@@ -1,6 +1,7 @@
 import { apply, tw } from "twind";
 
 export default {
+  mode: "silent",
   plugins: {
     applydark: apply`dark:(bg-gray-900 text-white) bg-white text-gray-800`,
   },
