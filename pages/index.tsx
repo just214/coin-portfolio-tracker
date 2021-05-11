@@ -121,8 +121,6 @@ const App = (props) => {
       return "text-red-400";
     } else if (previousTotal < currentTotal) {
       return "text-green-400";
-    } else if (previousTotal === currentTotal) {
-      return "text-white";
     }
   }
 
@@ -135,7 +133,7 @@ const App = (props) => {
 
   return (
     <Layout>
-      <header className="py-4 text-center my-2 bg-gray-900 sticky top-0 shadow-lg">
+      <header className="py-4 text-center my-2 sticky top-0 shadow-lg applydark">
         <h1
           className={`${getTotalColor(
             lastTotalValueInUsd.current,
@@ -156,7 +154,7 @@ const App = (props) => {
           return (
             <Accordion.Item
               value={value.coinId}
-              className={`duration-200 my-3 border-b border-gray-700 py-1`}
+              className={`duration-200 my-3 border(b gray-500) py-1`}
               key={value.coinId}
             >
               <Accordion.Header>
@@ -186,7 +184,7 @@ const App = (props) => {
                         {Math.abs(usd_24h_change).toFixed(2)}%
                       </span>
                     </div>
-                    <div className="children:text-right flex-1 text-blue-200 mx-2">
+                    <div className="children:text-right flex-1 text-blue-500 mx-2">
                       <p>{toUsd(value.total * usd)}</p>
                       <p className="text-xxs">
                         {toNum(value.total)} {value.coinSymbol}
@@ -225,7 +223,7 @@ const App = (props) => {
                     return (
                       <li
                         key={allocation.walletName}
-                        className="flex items-center justify-between font-medium text(xxs gray-300) odd:bg-transblack p-1"
+                        className="flex items-center justify-between font-medium text(xxs) odd:bg-transblack p-1"
                       >
                         <p className="flex-1">{allocation.walletName}</p>
                         <p className="flex-1">

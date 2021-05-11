@@ -1,8 +1,11 @@
-import { apply } from "twind";
+import { apply, tw } from "twind";
 
 export default {
+  plugins: {
+    applydark: apply`dark:(bg-gray-900 text-white) bg-white text-gray-800`,
+  },
   preflight: {
-    body: apply`bg-gray-900 text-white`,
+    body: apply`applydark`,
   },
   theme: {
     extend: {
@@ -10,7 +13,7 @@ export default {
         xxs: "11px",
       },
       colors: {
-        transblack: "rgba(0,0,0,.5)",
+        transblack: "rgba(0,0,0,.1)",
       },
     },
   },
