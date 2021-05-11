@@ -13,7 +13,7 @@ export function toNum(num: number) {
   return (
     num
       // https://exceptionshub.com/remove-insignificant-trailing-zeros-from-a-number.html
-      .toLocaleString("en")
+      .toLocaleString("en", { maximumSignificantDigits: 6 })
 
     // .replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/, "$1")
   );

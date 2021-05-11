@@ -1,4 +1,4 @@
-import { apply, tw } from "twind";
+import { apply } from "twind";
 
 export default {
   mode: "silent",

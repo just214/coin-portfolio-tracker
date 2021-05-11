@@ -137,7 +137,7 @@ const App = (props) => {
 
   return (
     <Layout>
-      <header className="py-4 text-center my-2 sticky top-0 shadow-lg applydark">
+      <header className="py-4 text-center my-2 sticky top-0 shadow-sm applydark">
         <h1
           className={`${getTotalColor(
             lastTotalValueInUsd.current,
@@ -161,7 +161,7 @@ const App = (props) => {
             <Accordion.Item
               value={value.coinId}
               className={`duration-200 my-3 py-1 ${
-                isExpanded ? "shadow-lg" : ""
+                isExpanded ? "shadow-lg rounded-xl" : ""
               }`}
               key={value.coinId}
             >
@@ -212,9 +212,7 @@ const App = (props) => {
               >
                 <ul
                   className={`my-4 mx-3 ${
-                    value.allocations.length === 1
-                      ? ""
-                      : "shadow-lg border-transblack"
+                    value.allocations.length === 1 ? "" : "border-transblack"
                   }`}
                 >
                   {value.allocations.map((allocation) => {
@@ -242,7 +240,7 @@ const App = (props) => {
                           %
                         </p>
                         <p className="flex-1">
-                          {toNum(allocation.coinQuantity)} {value.coinSymbol}
+                          {toNum(allocation.coinQuantity)}c
                         </p>
                         <p className="flex-1">
                           {toUsd(allocation.coinQuantity * usd)}
