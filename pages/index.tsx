@@ -1,5 +1,5 @@
 import { PushSpinner } from "react-spinners-kit";
-import { Transition } from "@headlessui/react";
+import Link from "next/link";
 import { useEffect, useState, useRef } from "react";
 import { CoinGeckoData, CoinData } from "../types";
 import { groupBy } from "lodash";
@@ -31,7 +31,7 @@ const App = (props) => {
   useEffect(() => {
     setTimeout(() => {
       lastTotalValueInUsd.current = totalValueInUsd;
-    }, 500);
+    }, 1000);
   }, [totalValueInUsd]);
 
   // Fetch the CoinGecko coin info for each coin in Airtable...on an interval every second
@@ -132,7 +132,7 @@ const App = (props) => {
 
   return (
     <Layout>
-      <header className="py-4 text-center my-2 bg-gray-900 sticky top-0 shadow-lg">
+      <header className="py-4 text-center my-2 bg-gray-900 sticky top-0 shadow-lg transition-colors duration-750">
         <h1
           className={`${getTotalColor(
             lastTotalValueInUsd.current,
@@ -201,7 +201,13 @@ const App = (props) => {
                   })
                 )}
               >
-                <ul className="p-4">
+                <ul
+                  className={`my-4 mx-3 ${
+                    value.allocations.length === 1
+                      ? ""
+                      : "shadow-lg border-transblack"
+                  }`}
+                >
                   {value.allocations.map((allocation) => {
                     if (value.allocations.length === 1) {
                       return (
@@ -216,7 +222,7 @@ const App = (props) => {
                     return (
                       <li
                         key={allocation.walletName}
-                        className="flex items-center justify-between font-medium text(xxs gray-300)"
+                        className="flex items-center justify-between font-medium text(xxs gray-300) odd:bg-transblack p-1"
                       >
                         <p className="flex-1">{allocation.walletName}</p>
                         <p className="flex-1">
