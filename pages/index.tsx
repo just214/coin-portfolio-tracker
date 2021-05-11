@@ -4,7 +4,12 @@ import { CoinGeckoData, CoinData } from "../types";
 import { groupBy } from "lodash";
 import { toNum, toUsd, fetchAirtableData } from "../utils";
 import { Layout } from "../components/Layout";
-import { FaCaretUp, FaCaretDown, FaPlus, FaMinus } from "react-icons/fa";
+import {
+  FaCaretUp,
+  FaCaretDown,
+  FaChevronRight,
+  FaChevronDown,
+} from "react-icons/fa";
 import * as Accordion from "@radix-ui/react-accordion";
 import { css, tw, animation } from "twind/css";
 
@@ -146,24 +151,30 @@ const App = (props) => {
       <Accordion.Root type="multiple" onValueChange={setExpandedCoinIds}>
         {data.map((value) => {
           const isExpanded = expandedCoinIds.includes(value.coinId);
-          const ExpandCollapseIcon = isExpanded ? FaMinus : FaPlus;
+          const ExpandCollapseIcon = isExpanded
+            ? FaChevronDown
+            : FaChevronRight;
           if (!coingeckoData[value.coinId]) return;
           const { usd, usd_24h_change } = coingeckoData[value.coinId];
 
           return (
             <Accordion.Item
               value={value.coinId}
-              className={`duration-200 my-3 border(b gray-200 dark:gray-700) py-1`}
+              className={`duration-200 my-3 py-1 ${
+                isExpanded ? "shadow-lg" : ""
+              }`}
               key={value.coinId}
             >
               <Accordion.Header>
                 <Accordion.Button
-                  className={`w-full ring-0 outline-none px-2 py-1 md:focus-visible:bg-transblack`}
+                  className={`w-full ring-0! outline-none! px-2 py-1 font-medium border(b gray-200 dark:gray-700) ${
+                    isExpanded ? "" : "focus-visible:shadow-md"
+                  }`}
                 >
                   <div className="flex items-center justify-between text-sm px-2">
                     <div className="text-left flex-1">
-                      <p>{value.coinName}</p>
-                      <p className="text-xs text-gray-400">
+                      <p className="text-base">{value.coinName}</p>
+                      <p className="text-sm text-gray-400">
                         {value.coinSymbol}
                       </p>
                     </div>
@@ -183,13 +194,11 @@ const App = (props) => {
                         {Math.abs(usd_24h_change).toFixed(2)}%
                       </span>
                     </div>
-                    <div className="children:text-right flex-1 text-blue-500 mx-2">
-                      <p>{toUsd(value.total * usd)}</p>
-                      <p className="text-xxs">
-                        {toNum(value.total)} {value.coinSymbol}
-                      </p>
+                    <div className="children:text-right flex-1 mx-2 ">
+                      <p className="font-bold">{toUsd(value.total * usd)}</p>
+                      <p className="text-xs">{toNum(value.total)}c</p>
                     </div>
-                    <ExpandCollapseIcon className="text(gray-600 xxs)" />
+                    <ExpandCollapseIcon className="text(gray-300 dark:gray-600 xxs)" />
                   </div>
                 </Accordion.Button>
               </Accordion.Header>

@@ -12,10 +12,10 @@ export function toUsd(num: number) {
 export function toNum(num: number) {
   return (
     num
-      .toFixed(4)
       // https://exceptionshub.com/remove-insignificant-trailing-zeros-from-a-number.html
-      .replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/, "$1")
-      .toLocaleString()
+      .toLocaleString("en")
+
+    // .replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/, "$1")
   );
 }
 
