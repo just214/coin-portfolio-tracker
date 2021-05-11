@@ -1,15 +1,15 @@
 {
   "name": "Cointail",
-  "short_name": "cointail",
+  "short_name": "Cointail",
   "icons": [
     {
-      "src": "/public/apple-touch-icon-144x144.png",
+      "src": "/apple-touch-icon-144x144.png",
       "sizes": "144x144",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/public/apple-touch-icon-152x152.png",
+      "src": "/apple-touch-icon-152x152.png",
       "sizes": "152x152",
       "type": "image/png"
     }
