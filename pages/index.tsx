@@ -47,7 +47,10 @@ const App = (props) => {
         const coingecko_endpoint = `https://api.coingecko.com/api/v3/simple/price?ids=${coinIds}&vs_currencies=usd&include_24hr_change=true`;
         const res = await fetch(coingecko_endpoint, {
           method: "GET",
-          headers: { accept: "application/json" },
+          headers: {
+            accept: "application/json",
+            // "Access-Control-Allow-Origin": "*",
+          },
         });
         const values = (await res.json()) as CoinGeckoData;
         return values;
@@ -119,7 +122,7 @@ const App = (props) => {
     } else if (previousTotal < currentTotal) {
       return "text-green-400";
     } else if (previousTotal === currentTotal) {
-      return "text-blue-100";
+      return "text-white";
     }
   }
 
@@ -132,12 +135,12 @@ const App = (props) => {
 
   return (
     <Layout>
-      <header className="py-4 text-center my-2 bg-gray-900 sticky top-0 shadow-lg transition-colors duration-750">
+      <header className="py-4 text-center my-2 bg-gray-900 sticky top-0 shadow-lg">
         <h1
           className={`${getTotalColor(
             lastTotalValueInUsd.current,
             totalValueInUsd
-          )} text(3xl md:4xl) font-bold`}
+          )} text(3xl md:4xl) font-bold transition-colors duration-500`}
         >
           {toUsd(totalValueInUsd)}
         </h1>
@@ -158,7 +161,7 @@ const App = (props) => {
             >
               <Accordion.Header>
                 <Accordion.Button
-                  className={`w-full ring-0! outline-none! px-2 py-1 focus-visible:bg-transblack`}
+                  className={`w-full ring-0 outline-none px-2 py-1 focus-visible:bg-transblack`}
                 >
                   <div className="flex items-center justify-between text-sm px-2">
                     <div className="text-left flex-1">
@@ -254,7 +257,10 @@ const App = (props) => {
 export default App;
 
 export async function getServerSideProps(context) {
-  if (!context.query.id) return null;
+  if (!context.query.id)
+    return {
+      props: {},
+    };
   const { key, id } = context.query;
   const airtableRecords = await fetchAirtableData(key, id);
 
