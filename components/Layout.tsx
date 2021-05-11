@@ -12,10 +12,7 @@ export const Layout = (props: LayoutProps) => {
     <main className="container mx-auto px-1 md:px-32 lg:px-64 xl:px-96 mb-12">
       <Head>
         <title>Cointail</title>
-        <link
-          rel="apple-touch-icon"
-          href="/apple-touch-icon-144x144.png"
-        ></link>
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png"></link>
         <link
           rel="apple-touch-icon-precomposed"
           sizes="144x144"
