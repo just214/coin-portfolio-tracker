@@ -1,6 +1,6 @@
 {
-  "name": "Cointail",
-  "short_name": "Cointail",
+  "name": "Coinster",
+  "short_name": "Coinster",
   "icons": [
     {
       "src": "/apple-touch-icon-144x144.png",
@@ -14,8 +14,8 @@
       "type": "image/png"
     }
   ],
-  "theme_color": "orange",
-  "background_color": "tomato",
+  "theme_color": "black",
+  "background_color": "black",
   "display": "standalone",
   "orientation": "portrait"
 }
