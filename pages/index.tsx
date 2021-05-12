@@ -249,6 +249,17 @@ const App = (props) => {
                     );
                   })}
                 </ul>
+
+                <div className="px-4 py-2">
+                  <a
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-500 text-sm focus:underline hover:underline"
+                    href={`https://www.coingecko.com/en/coins/${value.coinId}`}
+                  >
+                    View on CoinGecko
+                  </a>
+                </div>
               </Accordion.Panel>
             </Accordion.Item>
           );
