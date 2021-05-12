@@ -6,7 +6,9 @@ export function toUsd(num: number) {
     currency: "USD",
     minimumSignificantDigits: num > 1 ? undefined : 4,
   };
-  return new Intl.NumberFormat("en-US", options).format(num);
+  return new Intl.NumberFormat("en-US", options)
+    .format(num)
+    .replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/, "$1");
 }
 
 export function toNum(num: number) {
@@ -14,8 +16,6 @@ export function toNum(num: number) {
     num
       // https://exceptionshub.com/remove-insignificant-trailing-zeros-from-a-number.html
       .toLocaleString("en", { maximumSignificantDigits: 6 })
-
-    // .replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/, "$1")
   );
 }
 

@@ -138,146 +138,136 @@ const App = (props) => {
 
   return (
     <Layout>
-      <Transition
-        show={!!data.length}
-        enter="transition-opacity duration-1000"
-        enterFrom="opacity-0 scale-0"
-        enterTo="opacity-100 scale-1"
-        leave="transition-opacity duration-150"
-        leaveFrom="opacity-100"
-        leaveTo="opacity-0"
-      >
-        <header className="py-4 text-center my-2 sticky top-0 shadow-sm applydark">
-          <h1
-            className={`${getTotalColor(
-              lastTotalValueInUsd.current,
-              totalValueInUsd
-            )} text(3xl md:4xl) font-bold transition-colors duration-500`}
-          >
-            {toUsd(totalValueInUsd)}
-          </h1>
-        </header>
+      <header className="py-4 text-center my-2 sticky top-0 shadow-sm applydark">
+        <h1
+          className={`${getTotalColor(
+            lastTotalValueInUsd.current,
+            totalValueInUsd
+          )} text(3xl md:4xl) font-bold transition-colors duration-500`}
+        >
+          {toUsd(totalValueInUsd)}
+        </h1>
+      </header>
 
-        <Accordion.Root type="multiple" onValueChange={setExpandedCoinIds}>
-          {data.map((value) => {
-            const isExpanded = expandedCoinIds.includes(value.coinId);
-            const ExpandCollapseIcon = isExpanded
-              ? FaChevronDown
-              : FaChevronRight;
-            if (!coingeckoData[value.coinId]) return;
-            const { usd, usd_24h_change } = coingeckoData[value.coinId];
+      <Accordion.Root type="multiple" onValueChange={setExpandedCoinIds}>
+        {data.map((value) => {
+          const isExpanded = expandedCoinIds.includes(value.coinId);
+          const ExpandCollapseIcon = isExpanded
+            ? FaChevronDown
+            : FaChevronRight;
+          if (!coingeckoData[value.coinId]) return;
+          const { usd, usd_24h_change } = coingeckoData[value.coinId];
 
-            return (
-              <Accordion.Item
-                value={value.coinId}
-                className={`duration-200 my-3 py-1 ${
-                  isExpanded ? "shadow-lg rounded-xl" : ""
-                }`}
-                key={value.coinId}
-              >
-                <Accordion.Header>
-                  <Accordion.Button
-                    className={`w-full ring-0! outline-none! px-2 py-1 font-medium border(b gray-200 dark:gray-700) ${
-                      isExpanded ? "" : "focus-visible:shadow-md"
-                    }`}
-                  >
-                    <div className="flex items-center justify-between text-sm px-2">
-                      <div className="text-left flex-1">
-                        <p className="text-base">{value.coinName}</p>
-                        <p className="text-sm text-gray-400">
-                          {value.coinSymbol}
-                        </p>
-                      </div>
-                      <div className="text-right flex-1 mx-2">
-                        <p className="text-sm">{toUsd(usd)}</p>
-
-                        <span
-                          className={`text-sm justify-end flex items-center ${
-                            usd_24h_change > 0
-                              ? "text-green-500"
-                              : "text-red-500"
-                          }`}
-                        >
-                          {usd_24h_change > 0 ? (
-                            <FaCaretUp className="fill-current" />
-                          ) : (
-                            <FaCaretDown className="fill-current" />
-                          )}
-                          {Math.abs(usd_24h_change).toFixed(2)}%
-                        </span>
-                      </div>
-                      <div className="children:text-right flex-1 mx-2 ">
-                        <p className="font-bold">{toUsd(value.total * usd)}</p>
-                        <p className="text-xs">{toNum(value.total)}c</p>
-                      </div>
-                      <ExpandCollapseIcon className="text(gray-300 dark:gray-600 xxs)" />
-                    </div>
-                  </Accordion.Button>
-                </Accordion.Header>
-                <Accordion.Panel
-                  className={tw(
-                    css({
-                      '&[data-state="open"]': slideDownAnimation,
-                      '&[data-state="closed"]': slideUpAnimation,
-                    })
-                  )}
+          return (
+            <Accordion.Item
+              value={value.coinId}
+              className={`duration-200 my-3 py-1 ${
+                isExpanded ? "shadow-lg rounded-xl" : ""
+              }`}
+              key={value.coinId}
+            >
+              <Accordion.Header>
+                <Accordion.Button
+                  className={`w-full ring-0! outline-none! px-2 py-1 font-medium border(b gray-200 dark:gray-700) ${
+                    isExpanded ? "" : "focus-visible:shadow-md"
+                  }`}
                 >
-                  <ul
-                    className={`my-4 mx-3 ${
-                      value.allocations.length === 1 ? "" : "border-transblack"
-                    }`}
-                  >
-                    {value.allocations.map((allocation) => {
-                      if (value.allocations.length === 1) {
-                        return (
-                          <p
-                            className="font-medium text(xxs)"
-                            key={allocation.walletName}
-                          >
-                            All in {allocation.walletName}.
-                          </p>
-                        );
-                      }
-                      return (
-                        <li
-                          key={allocation.walletName}
-                          className="flex items-center justify-between font-medium text(xxs) odd:bg-transblack p-1"
-                        >
-                          <p className="flex-1">{allocation.walletName}</p>
-                          <p className="flex-1">
-                            {(
-                              (allocation.coinQuantity / value.total) *
-                              100
-                            ).toFixed(2)}
-                            %
-                          </p>
-                          <p className="flex-1">
-                            {toNum(allocation.coinQuantity)}c
-                          </p>
-                          <p className="flex-1">
-                            {toUsd(allocation.coinQuantity * usd)}
-                          </p>
-                        </li>
-                      );
-                    })}
-                  </ul>
+                  <div className="flex items-center justify-between text-sm px-2">
+                    <div className="text-left flex-1">
+                      <p className="text-base">{value.coinName}</p>
+                      <p className="text-sm text-gray-400">
+                        {value.coinSymbol}
+                      </p>
+                    </div>
+                    <div className="text-right flex-1 mx-2">
+                      <p className="text-sm">{toUsd(usd)}</p>
 
-                  <div className="px-4 py-2">
-                    <a
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-500 text-sm focus:underline hover:underline"
-                      href={`https://www.coingecko.com/en/coins/${value.coinId}`}
-                    >
-                      View on CoinGecko
-                    </a>
+                      <span
+                        className={`text-sm justify-end inline-flex rounded-full items-center px-1 ${
+                          usd_24h_change > 0
+                            ? "text-green-800 bg-green-200"
+                            : "text-red-800 bg-red-200"
+                        }`}
+                      >
+                        {usd_24h_change > 0 ? (
+                          <FaCaretUp className="fill-current" />
+                        ) : (
+                          <FaCaretDown className="fill-current" />
+                        )}
+                        {Math.abs(usd_24h_change).toFixed(2)}%
+                      </span>
+                    </div>
+                    <div className="children:text-right flex-1 mx-2 ">
+                      <p className="font-bold">{toUsd(value.total * usd)}</p>
+                      <p className="text-xs">{toNum(value.total)}c</p>
+                    </div>
+                    <ExpandCollapseIcon className="text(gray-300 dark:gray-600 xxs)" />
                   </div>
-                </Accordion.Panel>
-              </Accordion.Item>
-            );
-          })}
-        </Accordion.Root>
-      </Transition>
+                </Accordion.Button>
+              </Accordion.Header>
+              <Accordion.Panel
+                className={tw(
+                  css({
+                    '&[data-state="open"]': slideDownAnimation,
+                    '&[data-state="closed"]': slideUpAnimation,
+                  })
+                )}
+              >
+                <ul
+                  className={`my-4 mx-3 ${
+                    value.allocations.length === 1 ? "" : "border-transblack"
+                  }`}
+                >
+                  {value.allocations.map((allocation) => {
+                    if (value.allocations.length === 1) {
+                      return (
+                        <p
+                          className="font-medium text(xxs)"
+                          key={allocation.walletName}
+                        >
+                          All in {allocation.walletName}.
+                        </p>
+                      );
+                    }
+                    return (
+                      <li
+                        key={allocation.walletName}
+                        className="flex items-center justify-between font-medium text(xxs) odd:bg-transblack p-1"
+                      >
+                        <p className="flex-1">{allocation.walletName}</p>
+                        <p className="flex-1">
+                          {(
+                            (allocation.coinQuantity / value.total) *
+                            100
+                          ).toFixed(2)}
+                          %
+                        </p>
+                        <p className="flex-1">
+                          {toNum(allocation.coinQuantity)}c
+                        </p>
+                        <p className="flex-1">
+                          {toUsd(allocation.coinQuantity * usd)}
+                        </p>
+                      </li>
+                    );
+                  })}
+                </ul>
+
+                <div className="px-4 py-2">
+                  <a
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-500 text-sm focus:underline hover:underline"
+                    href={`https://www.coingecko.com/en/coins/${value.coinId}`}
+                  >
+                    View on CoinGecko
+                  </a>
+                </div>
+              </Accordion.Panel>
+            </Accordion.Item>
+          );
+        })}
+      </Accordion.Root>
     </Layout>
   );
 };
