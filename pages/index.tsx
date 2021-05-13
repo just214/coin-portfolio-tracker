@@ -37,9 +37,13 @@ const App = (props) => {
     if (!airtableRecords) return;
 
     const interval = setInterval(async () => {
-      const data = await fetchCoinGeckoData(airtableRecords);
-      setCoingeckoData(data);
-    }, 1000);
+      try {
+        const data = await fetchCoinGeckoData(airtableRecords);
+        setCoingeckoData(data);
+      } catch (error) {
+        console.error("COINGECKO ERROR", error);
+      }
+    }, 2000);
     fetchCoinGeckoData(airtableRecords);
 
     return () => {
@@ -49,6 +53,7 @@ const App = (props) => {
 
   // Step 3. Massage the Airtable and Coin Gecko data into the final data objects and save as state for rendering
   useEffect(() => {
+    if (!coingeckoData) return;
     const groupedCoinData = groupBy(
       airtableRecords,
       (value) => value.fields.CoinID
@@ -75,8 +80,6 @@ const App = (props) => {
       };
     });
 
-    if (!coingeckoData) return;
-
     const totalValue = arrayWithTotals.reduce((acc, value) => {
       return acc + value.total * (coingeckoData[value.coinId]?.usd || 0);
     }, 0);
@@ -85,8 +88,8 @@ const App = (props) => {
 
     setData(
       arrayWithTotals.sort((a, b) => {
-        return b.total * coingeckoData[b.coinId]?.usd <
-          a.total * coingeckoData[a.coinId]?.usd
+        return b.total * coingeckoData[b.coinId].usd <
+          a.total * coingeckoData[a.coinId].usd
           ? -1
           : 1;
       })
@@ -234,12 +237,12 @@ export default App;
 export async function getServerSideProps(context) {
   if (!context.query.id)
     return {
-      props: {},
+      props: { error: true },
     };
   const { key, id } = context.query;
   const airtableRecords = await fetchAirtableData(key, id);
   const coingeckoData = await fetchCoinGeckoData(airtableRecords);
-
+  console.log(coingeckoData);
   return {
     props: { airtableRecords, coingeckoData },
   };

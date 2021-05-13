@@ -30,7 +30,9 @@ export async function fetchAirtableData(
       headers: { Authorization: `Bearer ${key}` },
     });
     const { records } = await response.json();
-    return records as AirTableRecord[];
+    return (records as AirTableRecord[]).filter((record) => {
+      return record.fields.IgnoreCoin[0] === null;
+    });
   } catch (error) {
     console.error("AIRTABLE ERROR", error);
     return error;
