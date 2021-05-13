@@ -24,7 +24,7 @@ export const Header = (props: HeaderProps) => {
   }, [total]);
 
   return (
-    <header className="py-1 px-4 text-center my-2 sticky top-0 shadow-md applydark flex items-center justify-between">
+    <header className="p-4 text-center my-2 sticky top-0 shadow-md applydark flex items-center justify-between">
       <img src="/coinster-icon.svg" className="h-12 w-12" alt="Coinster" />
       <h1
         className={`${getTotalColor(
