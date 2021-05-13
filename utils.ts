@@ -4,11 +4,10 @@ export function toUsd(num: number) {
   const options = {
     style: "currency",
     currency: "USD",
-    minimumSignificantDigits: num > 1 ? undefined : 4,
+    minimumSignificantDigits: num > 1 ? undefined : 2,
   };
-  return new Intl.NumberFormat("en-US", options)
-    .format(num)
-    .replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/, "$1");
+  return new Intl.NumberFormat("en-US", options).format(num);
+  // .replace(/([0-9]+(\.[0-9]+[1-9])?)(\.?0+$)/, "$1");
 }
 
 export function toNum(num: number) {

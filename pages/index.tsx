@@ -1,4 +1,3 @@
-import { Transition } from "@headlessui/react";
 import { PushSpinner } from "react-spinners-kit";
 import { useEffect, useState, useRef } from "react";
 import { CoinGeckoData, CoinData } from "../types";
@@ -132,7 +131,7 @@ const App = (props) => {
   if (!data.length)
     return (
       <div className="flex items-center justify-center h-screen">
-        <PushSpinner size={80} color="orange" />
+        <PushSpinner size={80} color="gray" />
       </div>
     );
 
@@ -161,14 +160,14 @@ const App = (props) => {
           return (
             <Accordion.Item
               value={value.coinId}
-              className={`duration-200 my-3 py-1 ${
+              className={`duration-200 my-3 py-0 ${
                 isExpanded ? "shadow-lg rounded-xl" : ""
               }`}
               key={value.coinId}
             >
               <Accordion.Header>
                 <Accordion.Button
-                  className={`w-full ring-0! outline-none! px-2 py-1 font-medium border(b gray-200 dark:gray-700) ${
+                  className={`w-full ring-0! outline-none! px-2 pb-2 font-medium border(b gray-200 dark:gray-700) ${
                     isExpanded ? "" : "focus-visible:shadow-md"
                   }`}
                 >
@@ -183,10 +182,8 @@ const App = (props) => {
                       <p className="text-sm">{toUsd(usd)}</p>
 
                       <span
-                        className={`text-sm justify-end inline-flex rounded-full items-center px-1 ${
-                          usd_24h_change > 0
-                            ? "text-green-800 bg-green-200"
-                            : "text-red-800 bg-red-200"
+                        className={`text-sm justify-end flex items-center px-1 ${
+                          usd_24h_change > 0 ? "text-green-500" : "text-red-500"
                         }`}
                       >
                         {usd_24h_change > 0 ? (
@@ -197,7 +194,7 @@ const App = (props) => {
                         {Math.abs(usd_24h_change).toFixed(2)}%
                       </span>
                     </div>
-                    <div className="children:text-right flex-1 mx-2 ">
+                    <div className="children:text-right flex-1 mx-2">
                       <p className="font-bold">{toUsd(value.total * usd)}</p>
                       <p className="text-xs">{toNum(value.total)}c</p>
                     </div>

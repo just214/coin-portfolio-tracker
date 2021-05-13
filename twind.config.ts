@@ -1,4 +1,5 @@
 import { apply } from "twind";
+import { orange } from "twind/colors";
 
 export default {
   plugins: {
@@ -14,6 +15,7 @@ export default {
       },
       colors: {
         transblack: "rgba(0,0,0,.1)",
+        orange,
       },
     },
   },
