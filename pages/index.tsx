@@ -1,8 +1,9 @@
+import { Header } from "../components/Header";
 import { PushSpinner } from "react-spinners-kit";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { CoinGeckoData, CoinData } from "../types";
 import { groupBy } from "lodash";
-import { toNum, toUsd, fetchAirtableData } from "../utils";
+import { toNum, toUsd, fetchAirtableData, fetchCoinGeckoData } from "../utils";
 import { Layout } from "../components/Layout";
 import {
   FaCaretUp,
@@ -24,50 +25,22 @@ const slideUpAnimation = animation("150ms ease-in-out", {
 });
 
 const App = (props) => {
-  const { airtableRecords } = props;
-  const [coingeckoData, setCoingeckoData] = useState<CoinGeckoData>(null);
+  const { airtableRecords, coingeckoData: initialCoinData } = props;
+  const [coingeckoData, setCoingeckoData] =
+    useState<CoinGeckoData>(initialCoinData);
   const [data, setData] = useState<CoinData[]>([]);
   const [totalValueInUsd, setTotalValueInUsd] = useState<number>(null);
   const [expandedCoinIds, setExpandedCoinIds] = useState([]);
 
-  const lastTotalValueInUsd = useRef<number>(totalValueInUsd);
-
-  useEffect(() => {
-    setTimeout(() => {
-      lastTotalValueInUsd.current = totalValueInUsd;
-    }, 500);
-  }, [totalValueInUsd]);
-
   // Fetch the CoinGecko coin info for each coin in Airtable...on an interval every second
   useEffect(() => {
     if (!airtableRecords) return;
-    async function fetchCoinGeckoData() {
-      try {
-        const coinIds = [
-          // @ts-ignore
-          ...new Set(airtableRecords.map((value) => value.fields.CoinID[0])),
-        ].join(",");
 
-        const coingecko_endpoint = `https://api.coingecko.com/api/v3/simple/price?ids=${coinIds}&vs_currencies=usd&include_24hr_change=true`;
-        const res = await fetch(coingecko_endpoint, {
-          method: "GET",
-          headers: {
-            accept: "application/json",
-            // "Access-Control-Allow-Origin": "*",
-          },
-        });
-        const values = (await res.json()) as CoinGeckoData;
-        return values;
-      } catch (error) {
-        console.error("COINGECKO ERROR", error);
-        return error;
-      }
-    }
     const interval = setInterval(async () => {
-      const data = await fetchCoinGeckoData();
+      const data = await fetchCoinGeckoData(airtableRecords);
       setCoingeckoData(data);
     }, 1000);
-    fetchCoinGeckoData();
+    fetchCoinGeckoData(airtableRecords);
 
     return () => {
       clearInterval(interval);
@@ -120,14 +93,6 @@ const App = (props) => {
     );
   }, [coingeckoData]);
 
-  function getTotalColor(previousTotal, currentTotal) {
-    if (previousTotal > currentTotal) {
-      return "text-red-400";
-    } else if (previousTotal < currentTotal) {
-      return "text-green-400";
-    }
-  }
-
   if (!data.length)
     return (
       <div className="flex items-center justify-center h-screen">
@@ -137,16 +102,7 @@ const App = (props) => {
 
   return (
     <Layout>
-      <header className="py-4 text-center my-2 sticky top-0 shadow-sm applydark">
-        <h1
-          className={`${getTotalColor(
-            lastTotalValueInUsd.current,
-            totalValueInUsd
-          )} text(3xl md:4xl) font-bold transition-colors duration-500`}
-        >
-          {toUsd(totalValueInUsd)}
-        </h1>
-      </header>
+      <Header total={totalValueInUsd} />
 
       <Accordion.Root type="multiple" onValueChange={setExpandedCoinIds}>
         {data.map((value) => {
@@ -195,8 +151,12 @@ const App = (props) => {
                       </span>
                     </div>
                     <div className="children:text-right flex-1 mx-2">
-                      <p className="font-bold">{toUsd(value.total * usd)}</p>
-                      <p className="text-xs">{toNum(value.total)}c</p>
+                      <p className="font-bold text-base">
+                        {toUsd(value.total * usd)}
+                      </p>
+                      <p className="text-xs">
+                        {toNum(value.total)} {value.coinSymbol}
+                      </p>
                     </div>
                     <ExpandCollapseIcon className="text(gray-300 dark:gray-600 xxs)" />
                   </div>
@@ -278,8 +238,9 @@ export async function getServerSideProps(context) {
     };
   const { key, id } = context.query;
   const airtableRecords = await fetchAirtableData(key, id);
+  const coingeckoData = await fetchCoinGeckoData(airtableRecords);
 
   return {
-    props: { airtableRecords },
+    props: { airtableRecords, coingeckoData },
   };
 }

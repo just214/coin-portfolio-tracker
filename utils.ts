@@ -1,4 +1,5 @@
-import { AirTableRecord } from "./types";
+import { AirTableRecord, CoinGeckoData } from "./types";
+import numbro from "numbro";
 
 export function toUsd(num: number) {
   const options = {
@@ -11,11 +12,11 @@ export function toUsd(num: number) {
 }
 
 export function toNum(num: number) {
-  return (
-    num
-      // https://exceptionshub.com/remove-insignificant-trailing-zeros-from-a-number.html
-      .toLocaleString("en", { maximumSignificantDigits: 6 })
-  );
+  return numbro(num).format({
+    thousandSeparated: true,
+    average: true,
+    totalLength: 6,
+  });
 }
 
 export async function fetchAirtableData(
@@ -32,6 +33,29 @@ export async function fetchAirtableData(
     return records as AirTableRecord[];
   } catch (error) {
     console.error("AIRTABLE ERROR", error);
+    return error;
+  }
+}
+
+// FETCH
+export async function fetchCoinGeckoData(airtableRecords: AirTableRecord[]) {
+  try {
+    const coinIds = [
+      // @ts-ignore
+      ...new Set(airtableRecords.map((value) => value.fields.CoinID[0])),
+    ].join(",");
+
+    const coingecko_endpoint = `https://api.coingecko.com/api/v3/simple/price?ids=${coinIds}&vs_currencies=usd&include_24hr_change=true`;
+    const res = await fetch(coingecko_endpoint, {
+      method: "GET",
+      headers: {
+        accept: "application/json",
+      },
+    });
+    const values = await res.json();
+    return values as CoinGeckoData;
+  } catch (error) {
+    console.error("COINGECKO ERROR", error);
     return error;
   }
 }
