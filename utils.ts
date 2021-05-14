@@ -1,5 +1,6 @@
-import { AirTableRecord, CoinGeckoData } from "./types";
 import numbro from "numbro";
+import { groupBy } from "lodash";
+import { AirTableRecords, CoinGeckoData, CoinData } from "./types";
 
 export function toUsd(num: number) {
   const options = {
@@ -30,7 +31,7 @@ export async function fetchAirtableData(
       headers: { Authorization: `Bearer ${key}` },
     });
     const { records } = await response.json();
-    return (records as AirTableRecord[]).filter((record) => {
+    return (records as AirTableRecords).filter((record) => {
       return record.fields.IgnoreCoin[0] === null;
     });
   } catch (error) {
@@ -40,7 +41,7 @@ export async function fetchAirtableData(
 }
 
 // FETCH
-export async function fetchCoinGeckoData(airtableRecords: AirTableRecord[]) {
+export async function fetchCoinGeckoData(airtableRecords: AirTableRecords) {
   try {
     const coinIds = [
       // @ts-ignore
@@ -60,4 +61,55 @@ export async function fetchCoinGeckoData(airtableRecords: AirTableRecord[]) {
     console.error("COINGECKO ERROR", error);
     return error;
   }
+}
+
+export function getValuesByCoin(
+  airtableRecords: AirTableRecords,
+  coinGeckoData: CoinGeckoData
+): CoinData[] {
+  const groupedCoinData = groupBy(
+    airtableRecords,
+    (value) => value.fields.CoinID
+  );
+
+  const totalsArray = Object.keys(groupedCoinData).map((key) => {
+    const values = groupedCoinData[key];
+    const { CoinName, CoinSymbol, CoinID } = values[0].fields;
+    return {
+      coinName: CoinName[0],
+      coinSymbol: CoinSymbol[0],
+      coinId: CoinID[0],
+      total: values.reduce((acc, value) => {
+        return acc + value.fields.Quantity;
+      }, 0),
+      allocations: values
+        .map((value) => {
+          return {
+            walletName: value.fields.WalletName[0],
+            coinQuantity: value.fields.Quantity,
+          };
+        })
+        .sort((a, b) => (a.coinQuantity > b.coinQuantity ? -1 : 1)),
+    };
+  });
+  return totalsArray.sort((a, b) => {
+    return b.total * coinGeckoData[b.coinId].usd <
+      a.total * coinGeckoData[a.coinId].usd
+      ? -1
+      : 1;
+  });
+}
+
+export function getValuesByWallet(
+  airtableRecords: AirTableRecords,
+  coinGeckoData: CoinGeckoData
+) {}
+
+export function getTotalValueInUsd(
+  values: CoinData[],
+  coinGeckoData: CoinGeckoData
+) {
+  return values.reduce((acc, value) => {
+    return acc + value.total * (coinGeckoData[value.coinId]?.usd || 0);
+  }, 0);
 }

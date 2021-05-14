@@ -2,8 +2,14 @@ import { Header } from "../components/Header";
 import { PushSpinner } from "react-spinners-kit";
 import { useEffect, useState } from "react";
 import { CoinGeckoData, CoinData } from "../types";
-import { groupBy } from "lodash";
-import { toNum, toUsd, fetchAirtableData, fetchCoinGeckoData } from "../utils";
+import {
+  toNum,
+  toUsd,
+  fetchAirtableData,
+  fetchCoinGeckoData,
+  getValuesByCoin,
+  getTotalValueInUsd,
+} from "../utils";
 import { Layout } from "../components/Layout";
 import {
   FaCaretUp,
@@ -25,8 +31,8 @@ const slideUpAnimation = animation("150ms ease-in-out", {
 });
 
 const App = (props) => {
-  const { airtableRecords, coingeckoData: initialCoinData } = props;
-  const [coingeckoData, setCoingeckoData] =
+  const { airtableRecords, coinGeckoData: initialCoinData } = props;
+  const [coinGeckoData, setCoingeckoData] =
     useState<CoinGeckoData>(initialCoinData);
   const [data, setData] = useState<CoinData[]>([]);
   const [totalValueInUsd, setTotalValueInUsd] = useState<number>(null);
@@ -53,48 +59,12 @@ const App = (props) => {
 
   // Step 3. Massage the Airtable and Coin Gecko data into the final data objects and save as state for rendering
   useEffect(() => {
-    if (!coingeckoData) return;
-    const groupedCoinData = groupBy(
-      airtableRecords,
-      (value) => value.fields.CoinID
-    );
+    if (!coinGeckoData) return;
 
-    const arrayWithTotals = Object.keys(groupedCoinData).map((key) => {
-      const values = groupedCoinData[key];
-      const { CoinName, CoinSymbol, CoinID } = values[0].fields;
-      return {
-        coinName: CoinName[0],
-        coinSymbol: CoinSymbol[0],
-        coinId: CoinID[0],
-        total: values.reduce((acc, value) => {
-          return acc + value.fields.Quantity;
-        }, 0),
-        allocations: values
-          .map((value) => {
-            return {
-              walletName: value.fields.WalletName[0],
-              coinQuantity: value.fields.Quantity,
-            };
-          })
-          .sort((a, b) => (a.coinQuantity > b.coinQuantity ? -1 : 1)),
-      };
-    });
-
-    const totalValue = arrayWithTotals.reduce((acc, value) => {
-      return acc + value.total * (coingeckoData[value.coinId]?.usd || 0);
-    }, 0);
-
-    setTotalValueInUsd(totalValue);
-
-    setData(
-      arrayWithTotals.sort((a, b) => {
-        return b.total * coingeckoData[b.coinId].usd <
-          a.total * coingeckoData[a.coinId].usd
-          ? -1
-          : 1;
-      })
-    );
-  }, [coingeckoData]);
+    const values = getValuesByCoin(airtableRecords, coinGeckoData);
+    setTotalValueInUsd(getTotalValueInUsd(values, coinGeckoData));
+    setData(values);
+  }, [coinGeckoData]);
 
   if (!data.length)
     return (
@@ -113,8 +83,8 @@ const App = (props) => {
           const ExpandCollapseIcon = isExpanded
             ? FaChevronDown
             : FaChevronRight;
-          if (!coingeckoData[value.coinId]) return;
-          const { usd, usd_24h_change } = coingeckoData[value.coinId];
+          if (!coinGeckoData[value.coinId]) return;
+          const { usd, usd_24h_change } = coinGeckoData[value.coinId];
 
           return (
             <Accordion.Item
@@ -241,9 +211,8 @@ export async function getServerSideProps(context) {
     };
   const { key, id } = context.query;
   const airtableRecords = await fetchAirtableData(key, id);
-  const coingeckoData = await fetchCoinGeckoData(airtableRecords);
-  console.log(coingeckoData);
+  const coinGeckoData = await fetchCoinGeckoData(airtableRecords);
   return {
-    props: { airtableRecords, coingeckoData },
+    props: { airtableRecords, coinGeckoData },
   };
 }

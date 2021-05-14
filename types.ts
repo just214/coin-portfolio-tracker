@@ -14,6 +14,8 @@ export type AirTableRecord = {
   };
 };
 
+export type AirTableRecords = AirTableRecord[];
+
 export type CoinGeckoCoin = {
   usd: number;
   usd_24h_change: number;
