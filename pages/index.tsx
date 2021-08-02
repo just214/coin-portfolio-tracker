@@ -2,6 +2,7 @@ import { Header } from "../components/Header";
 import { PushSpinner } from "react-spinners-kit";
 import { useEffect, useState } from "react";
 import { CoinGeckoData, CoinData } from "../types";
+import { InferGetServerSidePropsType } from "next";
 import {
   toNum,
   toUsd,
@@ -18,19 +19,8 @@ import {
   FaChevronDown,
 } from "react-icons/fa";
 import * as Accordion from "@radix-ui/react-accordion";
-import { css, tw, animation } from "twind/css";
 
-const slideDownAnimation = animation("150ms ease-in-out", {
-  from: { height: "0px" },
-  to: { height: "var(--radix-accordion-panel-height)" },
-});
-
-const slideUpAnimation = animation("150ms ease-in-out", {
-  from: { height: "var(--radix-accordion-panel-height)" },
-  to: { height: "0px" },
-});
-
-const App = (props) => {
+const App = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const { airtableRecords, coinGeckoData: initialCoinData } = props;
   const [coinGeckoData, setCoingeckoData] =
     useState<CoinGeckoData>(initialCoinData);
@@ -89,15 +79,19 @@ const App = (props) => {
           return (
             <Accordion.Item
               value={value.coinId}
-              className={`duration-200 my-3 py-0 ${
-                isExpanded ? "shadow-lg rounded-xl" : ""
+              className={`duration-200 my-3 py-0 border-2 ${
+                isExpanded
+                  ? "shadow-lg rounded-xl border-gray-200"
+                  : "border-transparent"
               }`}
               key={value.coinId}
             >
               <Accordion.Header>
-                <Accordion.Button
-                  className={`w-full ring-0! outline-none! px-2 pb-2 font-medium border(b gray-200 dark:gray-700) ${
-                    isExpanded ? "" : "focus-visible:shadow-md"
+                <Accordion.Trigger
+                  className={`w-full ring-0! outline-none! px-2 pb-2 font-medium rounded-xl ${
+                    isExpanded
+                      ? "bg-gray-100 dark:bg-gray-800"
+                      : "focus-visible:shadow-md"
                   }`}
                 >
                   <div className="flex items-center justify-between text-sm px-2">
@@ -133,32 +127,15 @@ const App = (props) => {
                     </div>
                     <ExpandCollapseIcon className="text(gray-300 dark:gray-600 xxs)" />
                   </div>
-                </Accordion.Button>
+                </Accordion.Trigger>
               </Accordion.Header>
-              <Accordion.Panel
-                className={tw(
-                  css({
-                    '&[data-state="open"]': slideDownAnimation,
-                    '&[data-state="closed"]': slideUpAnimation,
-                  })
-                )}
-              >
+              <Accordion.Content>
                 <ul
                   className={`my-4 mx-3 ${
                     value.allocations.length === 1 ? "" : "border-transblack"
                   }`}
                 >
                   {value.allocations.map((allocation) => {
-                    if (value.allocations.length === 1) {
-                      return (
-                        <p
-                          className="font-medium text(xxs)"
-                          key={allocation.walletName}
-                        >
-                          All in {allocation.walletName}.
-                        </p>
-                      );
-                    }
                     return (
                       <li
                         key={allocation.walletName}
@@ -173,7 +150,7 @@ const App = (props) => {
                           %
                         </p>
                         <p className="flex-1">
-                          {toNum(allocation.coinQuantity)}c
+                          {toNum(allocation.coinQuantity)} {value.coinSymbol}
                         </p>
                         <p className="flex-1">
                           {toUsd(allocation.coinQuantity * usd)}
@@ -193,7 +170,7 @@ const App = (props) => {
                     View on CoinGecko
                   </a>
                 </div>
-              </Accordion.Panel>
+              </Accordion.Content>
             </Accordion.Item>
           );
         })}
