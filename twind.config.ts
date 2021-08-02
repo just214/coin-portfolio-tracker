@@ -1,4 +1,4 @@
-import { apply } from "twind";
+import { apply, silent } from "twind";
 import { orange } from "twind/colors";
 
 export default {
@@ -8,6 +8,7 @@ export default {
   preflight: {
     body: apply`applydark`,
   },
+  mode: silent,
   theme: {
     extend: {
       fontSize: {
