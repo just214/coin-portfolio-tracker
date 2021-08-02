@@ -3,6 +3,7 @@ import { PushSpinner } from "react-spinners-kit";
 import { useEffect, useState } from "react";
 import { CoinGeckoData, CoinData } from "../types";
 import { InferGetServerSidePropsType } from "next";
+import { useRouter } from "next/router";
 import {
   toNum,
   toUsd,
@@ -21,6 +22,7 @@ import {
 import * as Accordion from "@radix-ui/react-accordion";
 
 const App = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const router = useRouter();
   const { airtableRecords, coinGeckoData: initialCoinData } = props;
   const [coinGeckoData, setCoingeckoData] =
     useState<CoinGeckoData>(initialCoinData);
@@ -56,11 +58,17 @@ const App = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
     setData(values);
   }, [coinGeckoData]);
 
+  if (!router.query?.key || !router.query?.id) {
+    return <h1 className="p-8 text-red-600">Please provide a key and id.</h1>;
+  }
+
   if (!data.length)
     return (
-      <div className="flex items-center justify-center h-screen">
-        <PushSpinner size={80} color="gray" />
-      </div>
+      <Layout>
+        <div className="flex items-center justify-center h-screen w-screen">
+          <PushSpinner size={80} color="red" />
+        </div>
+      </Layout>
     );
 
   return (
@@ -79,16 +87,16 @@ const App = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
           return (
             <Accordion.Item
               value={value.coinId}
-              className={`duration-200 my-3 py-0 border-2 ${
+              className={`duration-200 my-3 py-0 border-2 overflow-hidden ${
                 isExpanded
-                  ? "shadow-lg rounded-xl border-gray-200"
+                  ? "shadow-lg rounded-xl border-gray-200 dark:border-gray-800"
                   : "border-transparent"
               }`}
               key={value.coinId}
             >
               <Accordion.Header>
                 <Accordion.Trigger
-                  className={`w-full ring-0! outline-none! px-2 pb-2 font-medium rounded-xl ${
+                  className={`w-full ring-0! outline-none! px-2 pb-2 font-medium appearance-none ${
                     isExpanded
                       ? "bg-gray-100 dark:bg-gray-800"
                       : "focus-visible:shadow-md"
@@ -131,7 +139,7 @@ const App = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
               </Accordion.Header>
               <Accordion.Content>
                 <ul
-                  className={`my-4 mx-3 ${
+                  className={`my-4 ${
                     value.allocations.length === 1 ? "" : "border-transblack"
                   }`}
                 >
@@ -139,9 +147,9 @@ const App = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
                     return (
                       <li
                         key={allocation.walletName}
-                        className="flex items-center justify-between font-medium text(xxs) odd:bg-transblack p-1"
+                        className="flex items-center justify-between font-medium text(xxs) odd:(bg-gray-100 dark:bg-gray-800) p-1"
                       >
-                        <p className="flex-1">{allocation.walletName}</p>
+                        <p className="flex-1 ml-2">{allocation.walletName}</p>
                         <p className="flex-1">
                           {(
                             (allocation.coinQuantity / value.total) *
