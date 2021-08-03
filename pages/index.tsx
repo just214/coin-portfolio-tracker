@@ -66,7 +66,7 @@ const App = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
     return (
       <Layout>
         <div className="flex items-center justify-center h-screen w-screen">
-          <PushSpinner size={80} color="red" />
+          <PushSpinner size={80} color="lightgray" />
         </div>
       </Layout>
     );
@@ -89,17 +89,15 @@ const App = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
               value={value.coinId}
               className={`duration-200 my-3 py-0 border-2 overflow-hidden ${
                 isExpanded
-                  ? "shadow-lg rounded-xl border-gray-200 dark:border-gray-800"
+                  ? "shadow-lg  border-gray-400 dark:border-gray-800"
                   : "border-transparent"
               }`}
               key={value.coinId}
             >
               <Accordion.Header>
                 <Accordion.Trigger
-                  className={`w-full ring-0! outline-none! px-2 pb-2 font-medium appearance-none ${
-                    isExpanded
-                      ? "bg-gray-100 dark:bg-gray-800"
-                      : "focus-visible:shadow-md"
+                  className={`w-full ring-0! outline-none! p-2 font-medium appearance-none active:bg-transblack ${
+                    isExpanded ? "bg-transblack" : "focus-visible:shadow-md"
                   }`}
                 >
                   <div className="flex items-center justify-between text-sm px-2">
@@ -125,29 +123,25 @@ const App = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
                         {Math.abs(usd_24h_change).toFixed(2)}%
                       </span>
                     </div>
-                    <div className="children:text-right flex-1 mx-2">
-                      <p className="font-bold text-base">
+                    <div className="text-right flex-1 mx-2">
+                      <p className="font-bold text-base text-right flex-1 mx-2">
                         {toUsd(value.total * usd)}
                       </p>
-                      <p className="text-xs">
+                      <p className="text-xs text-right flex-1 mx-2">
                         {toNum(value.total)} {value.coinSymbol}
                       </p>
                     </div>
-                    <ExpandCollapseIcon className="text(gray-300 dark:gray-600 xxs)" />
+                    <ExpandCollapseIcon />
                   </div>
                 </Accordion.Trigger>
               </Accordion.Header>
               <Accordion.Content>
-                <ul
-                  className={`my-4 ${
-                    value.allocations.length === 1 ? "" : "border-transblack"
-                  }`}
-                >
+                <ul>
                   {value.allocations.map((allocation) => {
                     return (
                       <li
                         key={allocation.walletName}
-                        className="flex items-center justify-between font-medium text(xxs) odd:(bg-gray-100 dark:bg-gray-800) p-1"
+                        className="flex items-center justify-between font-medium text-[11px] even:bg-transblack  p-1"
                       >
                         <p className="flex-1 ml-2">{allocation.walletName}</p>
                         <p className="flex-1">

@@ -1,5 +1,7 @@
-import withTwindApp from "@twind/next/app";
-import twindConfig from "../twind.config";
-import "twind/shim";
+import "tailwindcss/tailwind.css";
 
-export default withTwindApp(twindConfig);
+function MyApp({ Component, pageProps }) {
+  return <Component {...pageProps} />;
+}
+
+export default MyApp;
