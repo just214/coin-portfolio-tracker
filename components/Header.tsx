@@ -7,9 +7,9 @@ export type HeaderProps = {
 
 function getTotalColor(previousTotal, currentTotal) {
   if (previousTotal > currentTotal) {
-    return "text-red-400";
+    return "text-red-500";
   } else if (previousTotal < currentTotal) {
-    return "text-green-400";
+    return "text-green-500";
   }
 }
 
@@ -29,7 +29,7 @@ export const Header = (props: HeaderProps) => {
     <header className="p-4 text-center sticky top-0 shadow-md flex items-center justify-between backdrop-filter backdrop-blur-md">
       <img src="/coinster-icon.svg" className="h-12 w-12" alt="Coinster" />
       <h1
-        className={`${color} text-3xl md:text-4xl font-bold transition-colors duration-200`}
+        className={`${color} text-4xl font-light md:text-4xl font-bold transition-colors duration-200`}
       >
         {toUsd(total)}
       </h1>

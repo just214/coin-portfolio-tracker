@@ -87,7 +87,7 @@ const App = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
           return (
             <Accordion.Item
               value={value.coinId}
-              className={`duration-200 m-3 py-0 border-2 overflow-hidden rounded-lg border-gray-400 dark:border-gray-800`}
+              className={`duration-200 m-3 py-0 dark:bg-gray-800 bg-gray-50-100 border-2 overflow-hidden rounded-lg border-gray-300 dark:border-gray-600`}
               key={value.coinId}
             >
               <Accordion.Header>
