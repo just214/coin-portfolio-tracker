@@ -27,13 +27,13 @@ export const Layout = (props: LayoutProps) => {
           <link
             rel="icon"
             type="image/png"
-            href="/cointel-icon.svg"
+            href="/coinster-icon.svg"
             sizes="32x32"
           />
           <link
             rel="icon"
             type="image/png"
-            href="/cointel-icon.svg"
+            href="/coinster-icon.svg"
             sizes="16x16"
           />
           <meta name="application-name" content="Coinster" />
