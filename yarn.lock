@@ -1031,34 +1031,34 @@
   dependencies:
     "@babel/runtime" "^7.13.10"
 
-"@radix-ui/react-accordion@^0.0.17":
-  version "0.0.17"
-  resolved "https://registry.npmjs.org/@radix-ui/react-accordion/-/react-accordion-0.0.17.tgz#378b6512c7a8b029950f651ed6007f410e9b438e"
-  integrity sha512-Rf4RJBDTNCbeLP1NB1UKGdy/+vLAAv+GSbN4gEgNa8MOBkZtD0nq4qwXbYdJPcS0ljWara6OBCG0cr2f1SvSPg==
+"@radix-ui/react-accordion@^0.0.18":
+  version "0.0.18"
+  resolved "https://registry.npmjs.org/@radix-ui/react-accordion/-/react-accordion-0.0.18.tgz#63cbe44250300f9f3ed6d59e8150b8e25e4669a0"
+  integrity sha512-NksTGLiRbXOpAV1SdQB7x3ykPgvY1veCRMBFzz5D6NjVMIPsXUXmCeVWjCFtB287e+yBLg6n6TJYSMbomoulmA==
   dependencies:
     "@babel/runtime" "^7.13.10"
     "@radix-ui/primitive" "0.0.5"
-    "@radix-ui/react-collapsible" "0.0.16"
+    "@radix-ui/react-collapsible" "0.0.17"
     "@radix-ui/react-compose-refs" "0.0.5"
     "@radix-ui/react-context" "0.0.5"
     "@radix-ui/react-id" "0.0.6"
-    "@radix-ui/react-polymorphic" "0.0.12"
-    "@radix-ui/react-primitive" "0.0.14"
+    "@radix-ui/react-polymorphic" "0.0.13"
+    "@radix-ui/react-primitive" "0.0.15"
     "@radix-ui/react-use-controllable-state" "0.0.6"
 
-"@radix-ui/react-collapsible@0.0.16":
-  version "0.0.16"
-  resolved "https://registry.npmjs.org/@radix-ui/react-collapsible/-/react-collapsible-0.0.16.tgz#6a99068f70bb85a60f8cbd43f093bd3053ab61cc"
-  integrity sha512-kY9wojEbrpTge6sz3BZl1oXer2Szhi+MW60TSDf14mL6l8+e4ugp5y2ItGDjcW5B7AzL00dsMtqlxuAkhFjWxQ==
+"@radix-ui/react-collapsible@0.0.17":
+  version "0.0.17"
+  resolved "https://registry.npmjs.org/@radix-ui/react-collapsible/-/react-collapsible-0.0.17.tgz#d778ec1d5b7b4543fd4db1b3e4be96c74568d441"
+  integrity sha512-MiRf6eTNXBIEhOOK7F2kEJy6atr26PLVAT3gTONUvGTMPT2fUVZTOrG/KfnTyOuUoL4W468UPwTD1xN2L9tbUw==
   dependencies:
     "@babel/runtime" "^7.13.10"
     "@radix-ui/primitive" "0.0.5"
     "@radix-ui/react-compose-refs" "0.0.5"
     "@radix-ui/react-context" "0.0.5"
     "@radix-ui/react-id" "0.0.6"
-    "@radix-ui/react-polymorphic" "0.0.12"
-    "@radix-ui/react-presence" "0.0.14"
-    "@radix-ui/react-primitive" "0.0.14"
+    "@radix-ui/react-polymorphic" "0.0.13"
+    "@radix-ui/react-presence" "0.0.15"
+    "@radix-ui/react-primitive" "0.0.15"
     "@radix-ui/react-use-controllable-state" "0.0.6"
     "@radix-ui/react-use-layout-effect" "0.0.5"
 
@@ -1083,26 +1083,27 @@
   dependencies:
     "@babel/runtime" "^7.13.10"
 
-"@radix-ui/react-polymorphic@0.0.12":
-  version "0.0.12"
-  resolved "https://registry.npmjs.org/@radix-ui/react-polymorphic/-/react-polymorphic-0.0.12.tgz#bf4ae516669b68e059549538104d97322f7c876b"
-  integrity sha512-/GYNMicBnGzjD1d2fCAuzql1VeFrp8mqM3xfzT1kxhnV85TKdURO45jBfMgqo17XNXoNhWIAProUsCO4qFAAIg==
+"@radix-ui/react-polymorphic@0.0.13":
+  version "0.0.13"
+  resolved "https://registry.npmjs.org/@radix-ui/react-polymorphic/-/react-polymorphic-0.0.13.tgz#d010d48281626191c9513f11db5d82b37662418a"
+  integrity sha512-0sGqBp+v9/yrsMhPfAejxcem2MwAFgaSAxF3Sieaklm6ZVYM/hTZxxWI5NVOLGV+482GwW0wIqwpVUzREjmh+w==
 
-"@radix-ui/react-presence@0.0.14":
-  version "0.0.14"
-  resolved "https://registry.npmjs.org/@radix-ui/react-presence/-/react-presence-0.0.14.tgz#6a86058bbbf46234dd8840dacd620b3ac5797025"
-  integrity sha512-ufof9B76DHXV0sC8H7Lswh2AepdJFG8qEtF32JWrbA9N1bl2Jnf9px76KsagyC0MA8crGEZO5A96wizGuSgGWQ==
+"@radix-ui/react-presence@0.0.15":
+  version "0.0.15"
+  resolved "https://registry.npmjs.org/@radix-ui/react-presence/-/react-presence-0.0.15.tgz#4ff12feb436f1499148feb11c3a63a5d8fab568a"
+  integrity sha512-+5+ePKUdTkqN1ze7nYmcoeHSsmKCcREwt0NhvNgDocPaqEUoZSkK9Mq6eMiMXSj02NkXH9P+bK32VCClYFnMBQ==
   dependencies:
     "@babel/runtime" "^7.13.10"
     "@radix-ui/react-compose-refs" "0.0.5"
+    "@radix-ui/react-use-layout-effect" "0.0.5"
 
-"@radix-ui/react-primitive@0.0.14":
-  version "0.0.14"
-  resolved "https://registry.npmjs.org/@radix-ui/react-primitive/-/react-primitive-0.0.14.tgz#752a967cb05d4c5643634fe20274e7dc905d1cce"
-  integrity sha512-FYOWGCrxFpLdB534aWTwMK4Pjg8cxFb+745qWhPfI+cYi+aYUddJQD3ilRHHXxCBD72ve7/PufqeB7Y/QlKqgg==
+"@radix-ui/react-primitive@0.0.15":
+  version "0.0.15"
+  resolved "https://registry.npmjs.org/@radix-ui/react-primitive/-/react-primitive-0.0.15.tgz#c0cf609ee565a32969d20943e2697b42a04fbdf3"
+  integrity sha512-Y7JLnen/G3AT0cQXXkBo3A1OuWaKGerkd2gKs0Fuqxv+kTxEmYoqSp/soo0Mm3Ccw61LKLQAjPiE37GK9/Zqwg==
   dependencies:
     "@babel/runtime" "^7.13.10"
-    "@radix-ui/react-polymorphic" "0.0.12"
+    "@radix-ui/react-polymorphic" "0.0.13"
 
 "@radix-ui/react-use-callback-ref@0.0.5":
   version "0.0.5"
@@ -1219,10 +1220,10 @@
   resolved "https://registry.npmjs.org/@types/prop-types/-/prop-types-15.7.4.tgz#fcf7205c25dff795ee79af1e30da2c9790808f11"
   integrity sha512-rZ5drC/jWjrArrS8BR6SIr4cWpW09RNTYt9AMZo3Jwwif+iacXAqgVjm0B0Bv/S1jhDXKHqRVNCbACkJ89RAnQ==
 
-"@types/react@^17.0.15":
-  version "17.0.15"
-  resolved "https://registry.npmjs.org/@types/react/-/react-17.0.15.tgz#c7533dc38025677e312606502df7656a6ea626d0"
-  integrity sha512-uTKHDK9STXFHLaKv6IMnwp52fm0hwU+N89w/p9grdUqcFA6WuqDyPhaWopbNyE1k/VhgzmHl8pu1L4wITtmlLw==
+"@types/react@^17.0.17":
+  version "17.0.17"
+  resolved "https://registry.npmjs.org/@types/react/-/react-17.0.17.tgz#1772d3d5425128e0635a716f49ef57c2955df055"
+  integrity sha512-nrfi7I13cAmrd0wje8czYpf5SFbryczCtPzFc6ijqvdjKcyA3tCvGxwchOUlxb2ucBPuJ9Y3oUqKrRqZvrz0lw==
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
@@ -3104,10 +3105,10 @@ normalize-range@^0.1.2:
   resolved "https://registry.npmjs.org/normalize-range/-/normalize-range-0.1.2.tgz#2d10c06bdfd312ea9777695a4d28439456b75942"
   integrity sha1-LRDAa9/TEuqXd2laTShDlFa3WUI=
 
-numbro@^2.3.2:
-  version "2.3.2"
-  resolved "https://registry.npmjs.org/numbro/-/numbro-2.3.2.tgz#4967c631b0ea99b17dd7f88cdd1eaa4ace4d4971"
-  integrity sha512-GHRdsyYs6ugRP0mipuBKTybzTPKdlhzKh271PG3hPwL1fg2DKwK/I2nCsh0gW3FfIKBzWIFoBnousQfiAkOuwQ==
+numbro@^2.3.5:
+  version "2.3.5"
+  resolved "https://registry.npmjs.org/numbro/-/numbro-2.3.5.tgz#ab491bd5ee6af3731c6bdb11231ad19d2ee4fc72"
+  integrity sha512-xlKC0GIZn0iaF7LHE60/DmGfQadDNfnskXdGDGWJfaZfP4pbhc0x+nR8yIIpQkF9n7gJWS6fgBR3Pkvp/W6sDg==
   dependencies:
     bignumber.js "^8.1.1"
 
