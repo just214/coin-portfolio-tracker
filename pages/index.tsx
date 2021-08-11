@@ -87,51 +87,47 @@ const App = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
           return (
             <Accordion.Item
               value={value.coinId}
-              className={`duration-200 my-3 py-0 border-2 overflow-hidden ${
-                isExpanded
-                  ? "shadow-lg  border-gray-400 dark:border-gray-800"
-                  : "border-transparent"
-              }`}
+              className={`duration-200 m-3 py-0 border-2 overflow-hidden rounded-lg border-gray-400 dark:border-gray-800`}
               key={value.coinId}
             >
               <Accordion.Header>
                 <Accordion.Trigger
-                  className={`w-full ring-0! outline-none! p-2 font-medium appearance-none active:bg-transblack ${
-                    isExpanded ? "bg-transblack" : "focus-visible:shadow-md"
-                  }`}
+                  className={`w-full ring-0! outline-none! p-2 font-medium appearance-none active:bg-transblack`}
                 >
-                  <div className="flex items-center justify-between text-sm px-2">
-                    <div className="text-left flex-1">
-                      <p className="text-base">{value.coinName}</p>
-                      <p className="text-sm text-gray-400">
-                        {value.coinSymbol}
-                      </p>
-                    </div>
-                    <div className="text-right flex-1 mx-2">
-                      <p className="text-sm">{toUsd(usd)}</p>
+                  <div>
+                    <div className="flex items-center justify-between text-sm px-2">
+                      <div className="text-left flex-1">
+                        <p className="text-base">{value.coinName}</p>
+                        <p className="text-sm text-gray-400">
+                          {value.coinSymbol}
+                        </p>
+                      </div>
+                      <div className="text-right flex-1 mx-2">
+                        <p className="text-sm">
+                          <b>{toUsd(usd)}</b>
+                        </p>
 
-                      <span
-                        className={`text-sm justify-end flex items-center px-1 ${
-                          usd_24h_change > 0 ? "text-green-500" : "text-red-500"
-                        }`}
-                      >
-                        {usd_24h_change > 0 ? (
-                          <FaCaretUp className="fill-current" />
-                        ) : (
-                          <FaCaretDown className="fill-current" />
-                        )}
-                        {Math.abs(usd_24h_change).toFixed(2)}%
-                      </span>
+                        <span
+                          className={`text-sm justify-end flex items-center px-1 ${
+                            usd_24h_change > 0
+                              ? "text-green-500"
+                              : "text-red-500"
+                          }`}
+                        >
+                          {usd_24h_change > 0 ? (
+                            <FaCaretUp className="fill-current" />
+                          ) : (
+                            <FaCaretDown className="fill-current" />
+                          )}
+                          {Math.abs(usd_24h_change).toFixed(2)}%
+                        </span>
+                      </div>
+                      <ExpandCollapseIcon />
                     </div>
-                    <div className="text-right flex-1 mx-2">
-                      <p className="font-bold text-base text-right flex-1 mx-2">
-                        {toUsd(value.total * usd)}
-                      </p>
-                      <p className="text-xs text-right flex-1 mx-2">
-                        {toNum(value.total)} {value.coinSymbol}
-                      </p>
-                    </div>
-                    <ExpandCollapseIcon />
+                    <p className="text-sm text-left px-2 py-2 mt-1 bg-transblack dark:bg-black rounded-md">
+                      You have {toNum(value.total)} {value.coinSymbol} worth{" "}
+                      <b>{toUsd(value.total * usd)}</b>
+                    </p>
                   </div>
                 </Accordion.Trigger>
               </Accordion.Header>
