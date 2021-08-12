@@ -67,7 +67,7 @@ const App = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
     return (
       <Layout>
         <div className="flex items-center justify-center h-screen w-screen">
-          <PushSpinner size={80} color="lightgray" />
+          <PushSpinner size={80} color="orange" />
         </div>
       </Layout>
     );
