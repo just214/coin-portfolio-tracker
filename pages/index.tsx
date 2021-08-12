@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { CoinGeckoData, CoinData } from "../types";
 import { InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
+import { AllocationLineItem } from "../components/AllocationLineItem";
 import {
   toNum,
   toUsd,
@@ -92,7 +93,7 @@ const App = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
             >
               <Accordion.Header>
                 <Accordion.Trigger
-                  className={`w-full ring-0! outline-none! p-2 font-medium appearance-none active:bg-transblack`}
+                  className={`w-full ring-0! outline-none! p-2 font-medium appearance-none`}
                 >
                   <div>
                     <div className="flex items-center justify-between text-sm px-2">
@@ -108,23 +109,19 @@ const App = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
                         </p>
 
                         <span
-                          className={`text-sm justify-end flex items-center px-1 ${
-                            usd_24h_change > 0
-                              ? "text-green-500"
-                              : "text-red-500"
-                          }`}
+                          className={`text-xs justify-end flex items-center px-1`}
                         >
                           {usd_24h_change > 0 ? (
-                            <FaCaretUp className="fill-current" />
+                            <FaCaretUp className="text-green-500 text-base" />
                           ) : (
-                            <FaCaretDown className="fill-current" />
+                            <FaCaretDown className="text-red-500 text-base" />
                           )}
                           {Math.abs(usd_24h_change).toFixed(2)}%
                         </span>
                       </div>
                       <ExpandCollapseIcon />
                     </div>
-                    <p className="text-sm text-left px-2 py-2 mt-1 bg-transblack dark:bg-black rounded-md">
+                    <p className="text-sm text-left px-2 py-2 mt-1 bg-transblack dark:bg-[rgba(0,0,0,.2)] rounded-md">
                       You have {toNum(value.total)} {value.coinSymbol} worth{" "}
                       <b>{toUsd(value.total * usd)}</b>
                     </p>
@@ -135,25 +132,17 @@ const App = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
                 <ul>
                   {value.allocations.map((allocation) => {
                     return (
-                      <li
+                      <AllocationLineItem
+                        walletName={allocation.walletName}
                         key={allocation.walletName}
-                        className="flex items-center justify-between font-medium text-[11px] even:bg-transblack  p-1"
-                      >
-                        <p className="flex-1 ml-2">{allocation.walletName}</p>
-                        <p className="flex-1">
-                          {(
-                            (allocation.coinQuantity / value.total) *
-                            100
-                          ).toFixed(2)}
-                          %
-                        </p>
-                        <p className="flex-1">
-                          {toNum(allocation.coinQuantity)} {value.coinSymbol}
-                        </p>
-                        <p className="flex-1">
-                          {toUsd(allocation.coinQuantity * usd)}
-                        </p>
-                      </li>
+                        coinQuantity={allocation.coinQuantity}
+                        coinSymbol={value.coinSymbol}
+                        percentageAllocated={(
+                          (allocation.coinQuantity / value.total) *
+                          100
+                        ).toFixed(2)}
+                        valueInUsd={toUsd(allocation.coinQuantity * usd)}
+                      />
                     );
                   })}
                 </ul>
@@ -162,7 +151,7 @@ const App = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
                   <a
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-500 text-sm focus:underline hover:underline"
+                    className="text-blue-500 block text-sm text-center focus:underline hover:underline"
                     href={`https://www.coingecko.com/en/coins/${value.coinId}`}
                   >
                     View on CoinGecko
@@ -173,6 +162,12 @@ const App = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
           );
         })}
       </Accordion.Root>
+
+      <footer className="pt-4 text-center">
+        <span role="emoji" aria-label="Diamond Hands" className="text-3xl">
+          💎 🙌
+        </span>
+      </footer>
     </Layout>
   );
 };
