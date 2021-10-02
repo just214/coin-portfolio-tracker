@@ -32,7 +32,7 @@ export async function fetchAirtableData(
     });
     const { records } = await response.json();
     return (records as AirTableRecords).filter((record) => {
-      return record.fields.IgnoreCoin[0] === null;
+      return !!record.fields.CoinID;
     });
   } catch (error) {
     console.error("AIRTABLE ERROR", error);

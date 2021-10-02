@@ -10,7 +10,6 @@ export type AirTableRecord = {
     Quantity: number;
     Wallet: string[];
     WalletName: string[];
-    IgnoreCoin?: [null | true];
   };
 };
 
