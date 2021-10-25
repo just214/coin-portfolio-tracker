@@ -1,6 +1,6 @@
 import numbro from "numbro";
 import { groupBy } from "lodash";
-import { AirTableRecords, CoinGeckoData, CoinData } from "./types";
+import { AirTableRecords, CoinGeckoData, CoinData } from "types";
 
 export function toUsd(num: number) {
   const options = {

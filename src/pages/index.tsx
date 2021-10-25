@@ -1,10 +1,10 @@
-import { Header } from "../components/Header";
+import { Header } from "components/Header";
 import { PushSpinner } from "react-spinners-kit";
 import { useEffect, useState } from "react";
-import { CoinGeckoData, CoinData } from "../types";
+import { CoinGeckoData, CoinData } from "types";
 import { InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
-import { AllocationLineItem } from "../components/AllocationLineItem";
+import { AllocationLineItem } from "components/AllocationLineItem";
 import {
   toNum,
   toUsd,
@@ -123,7 +123,11 @@ const App = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
                     </div>
                     <p className="text-sm text-left px-2 py-2 mt-1 bg-transblack dark:bg-[rgba(0,0,0,.2)] rounded-md">
                       You have {toNum(value.total)} {value.coinSymbol} worth{" "}
-                      <b>{toUsd(value.total * usd)}</b>
+                      <b>{toUsd(value.total * usd)}</b> (
+                      {(((value.total * usd) / totalValueInUsd) * 100).toFixed(
+                        2
+                      )}
+                      %)
                     </p>
                   </div>
                 </Accordion.Trigger>

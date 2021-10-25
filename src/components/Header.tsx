@@ -1,5 +1,5 @@
 import { useRef, useEffect } from "react";
-import { toUsd } from "../utils";
+import { toUsd } from "utils";
 
 export type HeaderProps = {
   total: number;

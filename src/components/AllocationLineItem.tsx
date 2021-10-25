@@ -1,5 +1,5 @@
 import * as React from "react";
-import { toNum } from "../utils";
+import { toNum } from "utils";
 
 export type AllocationLineItemProps = {
   walletName: string;
