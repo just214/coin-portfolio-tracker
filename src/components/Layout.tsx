@@ -10,7 +10,7 @@ export const Layout = (props: LayoutProps) => {
   const { children } = props;
   return (
     <div className="w-full min-h-screen text-gray-800 dark:text-gray-200 bg-gray-100 dark:bg-gray-900">
-      <main className="container mx-auto px-1 md:px-32 lg:px-64 xl:px-96 pb-12">
+      <main className="container mx-auto max-w-3xl pb-12">
         <Head>
           <title>Coinster</title>
           <link rel="apple-touch-icon" href="/apple-touch-icon.png"></link>
