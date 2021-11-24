@@ -13,10 +13,10 @@ export function toUsd(num: number) {
 }
 
 export function toNum(num: number) {
-  return numbro(num).format({
+  return numbro(num.toFixed(8)).format({
     thousandSeparated: true,
-    average: true,
-    totalLength: 6,
+    // average: true,
+    // totalLength: 4,
   });
 }
 
