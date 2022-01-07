@@ -13,7 +13,8 @@ export function toUsd(num: number) {
 }
 
 export function toNum(num: number) {
-  return numbro(num.toFixed(8)).format({
+  const fixedNumber = num < 1000 ? num.toFixed(8) : num.toFixed(4);
+  return numbro(fixedNumber).format({
     thousandSeparated: true,
     // average: true,
     // totalLength: 4,

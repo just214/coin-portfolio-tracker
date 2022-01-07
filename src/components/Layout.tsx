@@ -9,7 +9,7 @@ export type LayoutProps = {
 export const Layout = (props: LayoutProps) => {
   const { children } = props;
   return (
-    <div className="w-full min-h-screen text-gray-800 dark:text-gray-200 bg-gray-100 dark:bg-gray-900">
+    <div className="w-full min-h-screen text-gray-800 dark:text-gray-200 bg-gradient-to-r from-sky-300 dark:from-sky-800 to-indigo-300 dark:to-indigo-800">
       <main className="container mx-auto max-w-3xl pb-12">
         <Head>
           <title>Coinster</title>

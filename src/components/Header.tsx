@@ -26,10 +26,11 @@ export const Header = (props: HeaderProps) => {
   const color = getTotalColor(previousTotal.current, total);
 
   return (
-    <header className="p-4 text-center sticky top-0 shadow-md flex items-center justify-between backdrop-filter backdrop-blur-md w-full">
+    <header className="p-4 text-center sticky top-0 flex items-center justify-between backdrop-filter backdrop-blur-md">
       <img src="/coinster-icon.svg" className="h-12 w-12" alt="Coinster" />
       <h1
-        className={`${color} text-4xl  md:text-4xl font-bold transition-colors duration-200`}>
+        className={`${color} text-4xl  md:text-5xl font-thin transition-colors duration-200`}
+      >
         {toUsd(total)}
       </h1>
     </header>

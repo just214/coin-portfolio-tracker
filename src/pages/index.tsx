@@ -67,7 +67,7 @@ const App = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
     return (
       <Layout>
         <div className="flex items-center justify-center h-screen">
-          <PushSpinner size={80} color="lightskyblue" />
+          <PushSpinner size={80} color="orange" />
         </div>
       </Layout>
     );
@@ -75,7 +75,6 @@ const App = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   return (
     <Layout>
       <Header total={totalValueInUsd} />
-
       <Accordion.Root type="multiple" onValueChange={setExpandedCoinIds}>
         {data.map((value) => {
           const isExpanded = expandedCoinIds.includes(value.coinId);
@@ -89,14 +88,25 @@ const App = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
             <Accordion.Item
               value={value.coinId}
               className={`duration-200 m-3 py-0 dark:bg-gray-800 bg-white overflow-hidden rounded-lg `}
-              key={value.coinId}>
+              key={value.coinId}
+            >
               <Accordion.Header>
                 <Accordion.Trigger
-                  className={`w-full ring-0! outline-none! p-2 font-medium appearance-none`}>
+                  className={`w-full ring-0! outline-none! p-2 font-medium appearance-none`}
+                >
                   <div>
                     <div className="flex items-center justify-between text-sm px-2">
                       <div className="text-left flex-1">
-                        <p className="text-base">{value.coinName}</p>
+                        <p className="text-base">
+                          {value.coinName}{" "}
+                          <span className="text-xs text-orange-500">
+                            {(
+                              ((value.total * usd) / totalValueInUsd) *
+                              100
+                            ).toFixed(2)}
+                            %
+                          </span>
+                        </p>
                         <p className="text-sm text-gray-400">
                           {value.coinSymbol}
                         </p>
@@ -107,7 +117,8 @@ const App = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
                         </p>
 
                         <span
-                          className={`text-xs justify-end flex items-center px-1`}>
+                          className={`text-xs justify-end flex items-center px-1`}
+                        >
                           {usd_24h_change > 0 ? (
                             <FaCaretUp className="text-green-500 text-base" />
                           ) : (
@@ -118,13 +129,10 @@ const App = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
                       </div>
                       <ExpandCollapseIcon />
                     </div>
-                    <p className="text-sm text-left px-2 py-2 mt-1 bg-transblack dark:bg-[rgba(0,0,0,.2)] rounded-md">
+
+                    <p className="rounded bg-black/10 dark:bg-[rgba(0,0,0,.2)] px-2text-sm text-left px-2 py-2 mt-1">
                       You have {toNum(value.total)} {value.coinSymbol} worth{" "}
-                      <b>{toUsd(value.total * usd)}</b> (
-                      {(((value.total * usd) / totalValueInUsd) * 100).toFixed(
-                        2
-                      )}
-                      %)
+                      <b>{toUsd(value.total * usd)}</b>.
                     </p>
                   </div>
                 </Accordion.Trigger>
@@ -153,7 +161,8 @@ const App = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-blue-500 block text-sm text-center focus:underline hover:underline"
-                    href={`https://www.coingecko.com/en/coins/${value.coinId}`}>
+                    href={`https://www.coingecko.com/en/coins/${value.coinId}`}
+                  >
                     View on CoinGecko
                   </a>
                 </div>

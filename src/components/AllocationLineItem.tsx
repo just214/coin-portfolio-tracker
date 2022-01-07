@@ -1,4 +1,3 @@
-import * as React from "react";
 import { toNum } from "utils";
 
 export type AllocationLineItemProps = {
@@ -13,7 +12,7 @@ export const AllocationLineItem = (props: AllocationLineItemProps) => {
   return (
     <li
       key={props.walletName}
-      className="flex items-center justify-between font-medium text-[11px] even:bg-transblack p-1"
+      className="flex items-center justify-between font-medium text-[11px] even:bg-black/10 p-1"
     >
       <p className="flex-1 ml-2">{props.walletName}</p>
       <p className="flex-1">{props.percentageAllocated}%</p>
