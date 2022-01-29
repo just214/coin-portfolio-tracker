@@ -13,6 +13,7 @@ export function toUsd(num: number) {
 }
 
 export function toNum(num: number) {
+  if (!num) return "0";
   const fixedNumber = num < 1000 ? num.toFixed(8) : num.toFixed(4);
   return numbro(fixedNumber).format({
     thousandSeparated: true,

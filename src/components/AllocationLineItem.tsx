@@ -9,6 +9,7 @@ export type AllocationLineItemProps = {
 };
 
 export const AllocationLineItem = (props: AllocationLineItemProps) => {
+  console.log({ props });
   return (
     <li
       key={props.walletName}
