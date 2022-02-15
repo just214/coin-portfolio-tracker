@@ -25,6 +25,7 @@ import * as Accordion from "@radix-ui/react-accordion";
 const App = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter();
   const { airtableRecords, coinGeckoData: initialCoinData } = props;
+  console.log(airtableRecords);
   const [coinGeckoData, setCoingeckoData] =
     useState<CoinGeckoData>(initialCoinData);
   const [data, setData] = useState<CoinData[]>([]);
@@ -75,7 +76,11 @@ const App = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   return (
     <Layout>
       <Header total={totalValueInUsd} />
-      <Accordion.Root type="multiple" onValueChange={setExpandedCoinIds}>
+      <Accordion.Root
+        type="multiple"
+        onValueChange={setExpandedCoinIds}
+        className="container mx-auto max-w-3xl"
+      >
         {data.map((value) => {
           const isExpanded = expandedCoinIds.includes(value.coinId);
           const ExpandCollapseIcon = isExpanded
