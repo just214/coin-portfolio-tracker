@@ -10,6 +10,8 @@ function getTotalColor(previousTotal, currentTotal) {
     return "text-red-500";
   } else if (previousTotal < currentTotal) {
     return "text-green-500";
+  } else {
+    return "text-gray-800 dark:text-white";
   }
 }
 
@@ -26,7 +28,7 @@ export const Header = (props: HeaderProps) => {
   const color = getTotalColor(previousTotal.current, total);
 
   return (
-    <header className="p-4 text-center sticky top-0 flex items-center justify-center bg-gray-900/80 backdrop-filter backdrop-blur-md">
+    <header className="p-4 mb-8 text-center sticky top-0 flex items-center justify-center bg-gray-500/10 dark:bg-gray-900/80 backdrop-filter backdrop-blur-md">
       {/* <img src="/coinster-icon.svg" className="h-12 w-12" alt="Coinster" /> */}
       <h1
         className={`${color} text-5xl font-medium transition-colors duration-200`}
