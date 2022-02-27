@@ -1,3 +1,7 @@
+# coin-portfolio-tracker
+
+This is the first attempt at a simple cryptocurrency portfolio tracker using Airtable and the CoinGecko API. This project is no longer actively developed.
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
